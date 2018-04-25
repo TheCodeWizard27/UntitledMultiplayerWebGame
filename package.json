@@ -1,0 +1,22 @@
+{
+  "name": "thegame",
+  "version": "0.0.1",
+  "description": "",
+  "main": "init.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node  ./init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/ICT-BBC/stu-inf-2017-be-controllergame.git"
+  },
+  "author": "Lukas Hofmann, Benny Schaerer",
+  "license": "MIT",
+  "dependencies": {
+    "createjs": "^1.0.1",
+    "express": "^4.16.3",
+    "path": "^0.12.7",
+    "socket.io": "^2.1.0"
+  }
+}
