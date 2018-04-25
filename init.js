@@ -1,3 +1,4 @@
+"use strict";
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -7,13 +8,29 @@ const io = require("socket.io")(server);
 const port = 3000;
 const hostname = "lh";
 
+const SC = require("./src/Const.js");
+
 app.use(express.static(path.join(__dirname, "public")));
 
-io.on("connection", socket => {
+io.on(SC.IO.NEW_CONNECTION, socket => {
 	console.log("CONNECTION");
-	socket.on("hui", data => {
-		console.log("hui %s", data);
-		socket.emit("ret", "Muahaasdshah");
+	
+	socket.emit(SC.IO.OUT.OUT_TEST1, "I");
+	socket.emit(SC.IO.OUT.OUT_TEST2, "II");
+	socket.emit(SC.IO.OUT.OUT_TEST3, "III");
+	
+	socket.on(SC.IO.IN.IN_TEST1, data => {
+		console.log("%s btn %s",socket.id ,data);
+	});
+	socket.on(SC.IO.IN.IN_TEST2, data => {
+		console.log("%s btn %s",socket.id ,data);
+	});
+	socket.on(SC.IO.IN.IN_TEST3, data => {
+		console.log("%s btn %s",socket.id ,data);
+	});
+	
+	socket.on("btn", data => {
+		console.log("%s btn %s",socket.id ,data);
 	});
 	
 });
@@ -21,37 +38,3 @@ io.on("connection", socket => {
 server.listen(port, hostname, () => {
 	console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-//import * as express from "express";
-//import * as http from "http";
-//import ioL from "socket.io";
-////import $ from "jquery";
-//
-//console.log("START");
-//
-//let app = express();
-//let server = http.Server(app);
-//let io = ioL(server);
-//let port = 2424;
-//let sockets = {};
-//
-//app.get('/', function(req, res) {
-//	res.sendfile('index.html');
-//});
-//
-////Whenever someone connects this gets executed
-//io.on('connection', function(socket) {
-//	console.log('A user connected');
-//
-//	//Whenever someone disconnects this piece of code executed
-//	socket.on('disconnect', function () {
-//		console.log('A user disconnected');
-//	});
-//
-//	socket.on("hi", x => console.log(x));
-//});
-//
-//http.listen(3000, function() {
-//	console.log('listening on *:3000');
-//});
-
