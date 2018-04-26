@@ -3,22 +3,23 @@
 export const SERVER_CONFIGURATION = {
 	IO: {
 		NEW_CONNECTION: "connect",
-		ON_EVENT: "event",
-		DISCONNECT: "disconnect",
+		ON_EVENT: "Event",
+		DISCONNECT: "Disconnect",
 		IN: {
-			USER_INPUT: "input",
-			IN_TEST1: "in1",
-			IN_TEST2: "in2",
-			IN_TEST3: "in3"
+			USER_INPUT: "Input",
+			IN_TEST1: "In1",
+			IN_TEST2: "In2",
+			IN_TEST3: "In3"
 		},
 		OUT: {
-			INIT: "init",
-			INPUT_RESPONSE: "input response",
-			OUT_TEST1: "OUT1",
-			OUT_TEST2: "OUT2",
-			OUT_TEST3: "OUT3"
+			INIT: "Init",
+			INPUT_RESPONSE: "Input response",
+			OUT_TEST1: "Out1",
+			OUT_TEST2: "Out2",
+			OUT_TEST3: "Out3"
 		}
 	},
+	
 	GAME: {
 		FPS: 30,
 		MAX_PLAYER: 4,

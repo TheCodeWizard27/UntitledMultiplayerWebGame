@@ -10,29 +10,19 @@ const hostname = "lh";
 
 const SC = require("./src/Const.js");
 
+const Connection = require("./src/Connection");
+const Player = require("./src/Player");
+const LobbyManager = require("./src/LobbyManager");
+
 app.use(express.static(path.join(__dirname, "public")));
 
+const lobbyManager = new LobbyManager();
+
 io.on(SC.IO.NEW_CONNECTION, socket => {
-	console.log("CONNECTION");
-	
-	socket.emit(SC.IO.OUT.OUT_TEST1, "I");
-	socket.emit(SC.IO.OUT.OUT_TEST2, "II");
-	socket.emit(SC.IO.OUT.OUT_TEST3, "III");
-	
-	socket.on(SC.IO.IN.IN_TEST1, data => {
-		console.log("%s btn %s",socket.id ,data);
-	});
-	socket.on(SC.IO.IN.IN_TEST2, data => {
-		console.log("%s btn %s",socket.id ,data);
-	});
-	socket.on(SC.IO.IN.IN_TEST3, data => {
-		console.log("%s btn %s",socket.id ,data);
-	});
-	
-	socket.on("btn", data => {
-		console.log("%s btn %s",socket.id ,data);
-	});
-	
+	let connection = new Connection(socket);
+	let player = new Player(connection);
+	lobbyManager.addPlayerToALobby(player);
+	console.log("Added Player with ID \"%s\" to Lobby %i", socket.id, player.getLobby().getId());
 });
 
 server.listen(port, hostname, () => {

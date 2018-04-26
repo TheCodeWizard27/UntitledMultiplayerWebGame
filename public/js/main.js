@@ -26,5 +26,5 @@ socket.emit(SC.IO.IN.IN_TEST2, "2");
 socket.emit(SC.IO.IN.IN_TEST3, "3");
 
 document.getElementById("trigger").onclick = () => {
-	socket.emit("btn", "KNOPP");
+	socket.emit(SC.IO.IN.IN_TEST1, "KNOPP");
 };
