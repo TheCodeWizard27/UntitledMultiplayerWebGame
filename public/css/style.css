@@ -1,11 +1,52 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body, html {
+	margin: 0;
+	padding: 0;
+	font:    14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+#bg{
+	position: absolute;
+	background-image: url("/img/pikachu.svg");
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	opacity: 0.15;
+	background-size: 80px;
+	display: block;
+	margin: 0;
+	padding: 0;
 }
 
-#img{
+main{
+	padding: 10px 20px;
+}
+
+h1{
+	display: flex;
+	justify-content: left;
+	align-items: center;
+}
+
+.flex{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 30px;
+}
+
+.connection{
+	width: 400px;
+	margin: 10px 0;
+	font-weight: bolder;
+}
+
+#add{
+	width: 140px;
+	margin: 0 20px;
+}
+
+#conns button{
+	float: right;
+	height: 100%;
+	width: 120px;
 }

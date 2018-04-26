@@ -1,30 +1,71 @@
-console.log("INIT");
-
 //import io from "socket.io-client";
 import {SERVER_CONFIGURATION as SC} from "./Const.js";
 
-const socket = io();
+let div;
 
 window.addEventListener("load", () => {
-	document.getElementById("log").innerHTML = socket.id;
+	console.log("INIT");
+	div = document.getElementById("conns");
+	document.getElementById("add").onclick = () => {
+		new Connection();
+	};
 });
 
-socket.on(SC.IO.OUT.OUT_TEST1, data => {
-	console.log(data);
-});
+class Connection {
+	constructor() {
+		this._socket = io();
+		this.udiv = document.createElement("div");
+		this.udiv.setAttribute("class", "connection");
+		
+		let idiv = document.createElement("div");
+		idiv.setAttribute("class", "flex");
+		
+		
+		let p = document.createElement("p");
+		let btn = document.createElement("button");
+		btn.innerText = "DIE";
+		btn.onclick = () => this.close();
+		
+		this.udiv.appendChild(document.createElement("hr"));
+		
+		idiv.appendChild(p);
+		idiv.appendChild(btn);
+		
+		this.udiv.appendChild(idiv);
+		this.udiv.appendChild(document.createElement("hr"));
+		div.appendChild(this.udiv);
+		
+		this._socket.on("connect", () => {
+			let id = this._socket.id;
+			console.log("%o", id);
+			this.udiv.id = id;
+			p.innerText = id;
+		});
+	}
+	
+	close() {
+		div.removeChild(this.udiv);
+		this._socket.close();
+	}
+}
 
-socket.on(SC.IO.OUT.OUT_TEST2, data => {
-	console.log(data);
-});
-
-socket.on(SC.IO.OUT.OUT_TEST3, data => {
-	console.log(data);
-});
-
-socket.emit(SC.IO.IN.IN_TEST1, "1");
-socket.emit(SC.IO.IN.IN_TEST2, "2");
-socket.emit(SC.IO.IN.IN_TEST3, "3");
-
-document.getElementById("trigger").onclick = () => {
-	socket.emit(SC.IO.IN.IN_TEST1, "KNOPP");
-};
+//
+//addEventListener("load", () => {
+//	document.getElementById("log").innerHTML = _socket.id;
+//});
+//
+//_socket.on(SC.IO.OUT.OUT_TEST1, data => {
+//	console.log(data);
+//});
+//
+//_socket.on(SC.IO.OUT.OUT_TEST2, data => {
+//	console.log(data);
+//});
+//
+//_socket.on(SC.IO.OUT.OUT_TEST3, data => {
+//	console.log(data);
+//});
+//
+//_socket.emit(SC.IO.IN.IN_TEST1, "1");
+//_socket.emit(SC.IO.IN.IN_TEST2, "2");
+//_socket.emit(SC.IO.IN.IN_TEST3, "3");

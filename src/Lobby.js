@@ -17,6 +17,8 @@ class Lobby {
 		return false;
 	}
 	
+	removePlayer(player) { return this._players = this._players.filter(e => e !== player); }
+	
 	getId() { return this._id;}
 	
 }

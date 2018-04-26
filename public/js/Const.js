@@ -3,8 +3,8 @@
 export const SERVER_CONFIGURATION = {
 	IO: {
 		NEW_CONNECTION: "connect",
-		ON_EVENT: "Event",
-		DISCONNECT: "Disconnect",
+		ON_EVENT: "event",
+		DISCONNECT: "disconnect",
 		IN: {
 			USER_INPUT: "Input",
 			IN_TEST1: "In1",
