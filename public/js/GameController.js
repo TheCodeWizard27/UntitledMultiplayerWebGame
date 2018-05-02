@@ -1,10 +1,17 @@
 "use strict";
-import {Graphics} from "./Graphics.js";
+import Graphics from "./Graphics.js";
 
-export default class GameController{
-	constructor(){
-		console.log("init GameController");
-		var _stage = new createjs.Stage("window");
-		var _graphics = new Graphics(_stage);
+let GameController = {
+	init : function(){
+		this._stage = new createjs.Stage("window");		//creates stage to draw on with canvas
+		
+		this._graphics = Graphics.getInstance(this._stage);
+		this._graphics.init(this);
+	},
+	
+	update : function(){
+	
 	}
-}
+};
+
+export default GameController;
