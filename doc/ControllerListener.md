@@ -14,5 +14,7 @@ Hier werden alle Kontroller durchlaufen. Neue werden der internen Liste hinzugef
 Die setzt die Events fest, welche aufgerufen wird, wenn etwas bei den Knöpfeh passiert.
 ###setDPadCallback
 Die setzt die Events fest, welche aufgerufen wird, wenn etwas auf dem Steuerknüpel passiert.
+###setGlobalEvents
+Die setzt die Events fest, welche aufgerufen wird, wenn ein Kontroller verbunden oder getrennt wird.
 ###getDPadDirection
 Diese Funktion liefert immer den aktuellen Wert des Steuerknüpels.
