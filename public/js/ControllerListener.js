@@ -10,6 +10,9 @@ export default class ControllerListener {
 	constructor() {
 		this._gamepads = [];
 		
+		this._onEventDisconnect = () => {};
+		this._onEventConnect = () => {};
+		
 		this._btnCallbackPressed = () => {};
 		this._btnCallbackDown = () => {};
 		this._btnCallbackUp = () => {};
@@ -48,7 +51,8 @@ export default class ControllerListener {
 	}
 	
 	_loop(base) {
-		if(base._i >= 10) {
+		// After every 5 loop sycles the scan function going to be called
+		if(base._i >= 5) {
 			base._scanGamePads(base);
 			base._i = 0;
 		} else base._i++;
@@ -118,6 +122,11 @@ export default class ControllerListener {
 			if(!pad || base._gamepads.includes(pad)) continue;
 			base._gamepads.push(pad);
 			console.log(pad);
+			base._onEventConnect(pad);
+		}
+		
+		for(let pad of base._gamepads.filter(x => !navigatorGamepads.includes(x)) || []){
+			base._onEventDisconnect(pad);
 		}
 		
 		base._gamepads = base._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
@@ -148,6 +157,18 @@ export default class ControllerListener {
 	 */
 	setDPadCallback(key, callback) {
 		this["_dpadEvent" + upperFirst(key.toLowerCase())] = callback;
+	}
+	
+	/**
+	 * This function is used to set the global events.
+	 * <ul><li>connect</li>
+	 *     <li>disconnect</li></ul>
+	 * @param {String} key - The name of the event
+	 * @param {function(String: name, Object)} callback - The function, which are going to be
+	 * called
+	 */
+	setGlobalEvents(key, callback) {
+		this["_onEvent" + upperFirst(key.toLowerCase())] = callback;
 	}
 	
 	/**
