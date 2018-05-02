@@ -1,6 +1,7 @@
 "use strict";
 
 import {upperFirst} from "./functions.js";
+import {DIRECTION} from "./Const.js";
 
 /**
  * This Listener triggers events, when something happens on a phisical game controller
@@ -39,7 +40,7 @@ export default class ControllerListener {
 	
 	/**
 	 * This function stops the listenning period
-	 * @returns {boolean} It returns true, when the intervall was terminated successfully and it returns false, when
+	 * @returns {boolean} It returns true, when the interval was terminated successfully and it returns false, when
 	 * no intervall was defined in the past
 	 */
 	stop() {
@@ -51,7 +52,7 @@ export default class ControllerListener {
 	}
 	
 	_loop(base) {
-		// After every 5 loop sycles the scan function going to be called
+		// After every 5 loop sycles the scan function is going to get called
 		if(base._i >= 5) {
 			base._scanGamePads(base);
 			base._i = 0;
@@ -89,27 +90,27 @@ export default class ControllerListener {
 			switch(axis) {
 				// Up
 			case 1:
-				base._dpadDirection = {x: 0, y: -1};
+				base._dpadDirection = DIRECTION.UP;
 				base._dpadEventUp(pad.id, base._dpadDirection);
 				break;
 				// Right
 			case 0.4285714030265808:
-				base._dpadDirection = {x: 1, y: 0};
+				base._dpadDirection = DIRECTION.RIGHT;
 				base._dpadEventRight(pad.id, base._dpadDirection);
 				break;
 				// Down
 			case 0.14285719394683838:
-				base._dpadDirection = {x: 0, y: 1};
+				base._dpadDirection = DIRECTION.DOWN;
 				base._dpadEventDown(pad.id, base._dpadDirection);
 				break;
 				// Left
 			case 0.7142857313156128:
-				base._dpadDirection = {x: -1, y: 0};
+				base._dpadDirection = DIRECTION.LEFT;
 				base._dpadEventLeft(pad.id, base._dpadDirection);
 				break;
 				// Default
 			default:
-				base._dpadDirection = {x: 0, y: 0};
+				base._dpadDirection = new createjs.Point(0,0);
 				base._dpadEventWaiting(pad.id, base._dpadDirection);
 			}
 		}
