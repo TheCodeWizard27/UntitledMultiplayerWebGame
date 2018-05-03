@@ -6,7 +6,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 const port = 3000;
-const hostname = "lh";
+const hostname = "localhost";
 
 const SC = require("./src/Const.js");
 

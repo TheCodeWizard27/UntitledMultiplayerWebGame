@@ -1,4 +1,5 @@
 'use strict';
+import Graphics from "./Graphics.js";
 
 /**
  * Collectable Class holds information about a collectable
@@ -9,16 +10,16 @@ export default class Collectable{
 	 * @param pos	position
 	 * @param graphics	to add the sprite
 	 */
-	constructor(pos, graphics){
+	constructor(pos){
 		this._pos = pos;
-		this._sprite = graphics.createCollectable();
+		this._sprite = Graphics.getInstance().createCollectable();
 	}
 	
 	/**
 	 * removes sprite from stage for deletion
 	 * @param graphics
 	 */
-	destroy(graphics){
-		graphics.removeSprite(this._sprite);
+	destroy(){
+		Graphics.getInstance().removeSprite(this._sprite);
 	}
 }

@@ -1,4 +1,5 @@
 'use strict';
+import Graphics from "./Graphics.js";
 
 /**
  * Player Class holds information about the position, the direction, the score, all markers.
@@ -9,8 +10,7 @@ export default class Player{
 	 * Creates Player Object
 	 * @param graphics for deleting adding sprites to stage
 	 */
-	constructor(pos, graphics){
-		this._graphics = graphics;
+	constructor(pos){
 		this._pos = pos;
 		this._dir = new createjs.Point(0,1);
 		this._markers = [];
@@ -18,7 +18,7 @@ export default class Player{
 		this._walking = false;
 		this._keyBuffer = new Set();
 		this._score = 0;
-		this._sprite = this._graphics.createPlayer();
+		this._sprite = Graphics.getInstance().createPlayer();
 	}
 	
 	/**
@@ -49,6 +49,6 @@ export default class Player{
 	 * Deletes Player Sprite for deleting playerobj
 	 */
 	delete(){
-		this._graphics.removeSprite(this._sprite);
+		Graphics.getInstance().removeSprite(this._sprite);
 	}
 }
