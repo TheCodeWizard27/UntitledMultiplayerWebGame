@@ -35,7 +35,7 @@ class Connection {
 		this.udiv.appendChild(document.createElement("hr"));
 		div.appendChild(this.udiv);
 		
-		this._socket.on("connect", () => {
+		this._socket.on(SC.IO.NEW_CONNECTION, () => {
 			let id = this._socket.id;
 			console.log("%o", id);
 			this.udiv.id = id;

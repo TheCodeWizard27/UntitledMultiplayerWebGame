@@ -9,15 +9,15 @@ class LobbyManager {
 	}
 	
 	addPlayerToALobby(player) {
-		for(let lobby of this._lobbies) {
+		for(let lobby of this._lobbies.map(e=>e[0])) {
 			if(lobby.tryToAddPlayer(player)) {
 				player.setLobby(lobby);
 				return;
 			}
 		}
-		let newLobby = new Lobby(this.i++); // TODO Change id to a better value
-		newLobby.tryToAddPlayer(player);
-		this._lobbies.push(newLobby);
+		let newLobby = new Lobby(this.i++, player); // TODO Change id to a better value
+		let res = newLobby.start();
+		this._lobbies.push([newLobby, res]);
 	}
 }
 
