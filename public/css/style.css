@@ -6,17 +6,19 @@ body, html {
 	margin:           0;
 	padding:          0;
 	background-image: url("/assets/textures/background.jpg");
-	width: 100%;
-	height: 100%;
+	width:            100%;
+	height:           100%;
 }
 
-body{
-	display: flex;
+body {
+	display:         flex;
 	justify-content: center;
-	align-items: center;
+	align-items:     center;
 }
 
-#window{
+#window {
+	margin: 10px;
+	width: 100vw;
+	height: calc((100vw / 1380)*680);
 	background-color: white;
-	outline: solid 4px black;
 }
