@@ -1,5 +1,7 @@
+"use strict";
 //import io from "socket.io-client";
 import {SERVER_CONFIGURATION as SC} from "./Const.js";
+import GameController from "./GameController.js";
 
 let div;
 
@@ -9,6 +11,7 @@ window.addEventListener("load", () => {
 	document.getElementById("add").onclick = () => {
 		new Connection();
 	};
+	GameController.init();
 });
 
 class Connection {
