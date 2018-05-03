@@ -1,7 +1,6 @@
 "use strict";
 
 import {upperFirst} from "./functions.js";
-import {DIRECTION} from "./Const.js";
 
 /**
  * This Listener triggers events, when something happens on a phisical game controller
@@ -17,15 +16,13 @@ export default class ControllerListener {
 		this._btnCallbackPressed = () => {};
 		this._btnCallbackDown = () => {};
 		this._btnCallbackUp = () => {};
-		this._btnLast = [];
 		
-		this._dpadEventUp = () => {};
-		this._dpadEventRight = () => {};
+		this._dpadEventPressed = () => {};
 		this._dpadEventDown = () => {};
-		this._dpadEventLeft = () => {};
-		this._dpadEventWaiting = () => {};
+		this._dpadEventUp = () => {};
+		this._minDelta = 0.8;
 		
-		this._dpadDirection = DIRECTION.WAITING;
+		this.log = document.getElementById("log");
 		
 		this._i = 0;
 	}
@@ -35,6 +32,7 @@ export default class ControllerListener {
 	 */
 	start() {
 		this._scanGamePads(this);
+		console.table(this._gamepads);
 		this._loopInterval = setInterval(this._loop.bind(this), 10, this);
 	}
 	
@@ -58,8 +56,9 @@ export default class ControllerListener {
 			this._i = 0;
 		} else this._i++;
 		
-		let nowPressed = [];
 		for(let pad of this._gamepads) {
+			let nowPressedButtons = [];
+			let nowPressedAxes = [];
 			// Buttons
 			for(let nr = 0; nr < pad.buttons.length; nr++) {
 				let btn = pad.buttons[nr];
@@ -67,52 +66,48 @@ export default class ControllerListener {
 				
 				if(!btn.pressed) continue;
 				
-				if(!this._btnLast.includes(nr)) {
-					this._btnLast.push(nr);
-					this._btnCallbackDown(pad.id, btn);
+				if(!pad._btnLast.includes(nr)) {
+					pad._btnLast.push(nr);
+					this._btnCallbackDown({id:pad.id, index:pad.index}, btn);
 				}
 				
-				this._btnCallbackPressed(pad.id, btn);
-				nowPressed.push(nr);
+				this._btnCallbackPressed({id:pad.id, index:pad.index}, btn);
+				nowPressedButtons.push(nr);
 			}
 			
-			for(let last of this._btnLast) {
-				if(!nowPressed.includes(last)) {
+			for(let last of pad._btnLast) {
+				if(!nowPressedButtons.includes(last)) {
 					let btn = pad.buttons[last];
 					btn.nr = last;
-					this._btnCallbackUp(pad.id, btn);
+					this._btnCallbackUp({id:pad.id, index:pad.index}, btn);
 				}
 			}
-			this._btnLast = nowPressed;
+			pad._btnLast = nowPressedButtons;
 			
 			// D-Pad axes
-			let axis = Math.abs(pad.axes[9]); // TODO I have no clue why index 9?!
-			switch(axis) {
-				// Up
-			case 1:
-				this._dpadDirection = DIRECTION.UP;
-				this._dpadEventUp(pad.id, this._dpadDirection);
-				break;
-				// Right
-			case 0.4285714030265808:
-				this._dpadDirection = DIRECTION.RIGHT;
-				this._dpadEventRight(pad.id, this._dpadDirection);
-				break;
-				// Down
-			case 0.14285719394683838:
-				this._dpadDirection = DIRECTION.DOWN;
-				this._dpadEventDown(pad.id, this._dpadDirection);
-				break;
-				// Left
-			case 0.7142857313156128:
-				this._dpadDirection = DIRECTION.LEFT;
-				this._dpadEventLeft(pad.id, this._dpadDirection);
-				break;
-				// Default
-			default:
-				this._dpadDirection = DIRECTION.WAITING;
-				this._dpadEventWaiting(pad.id, this._dpadDirection);
+			
+			let axis0 = Math.round(pad.axes[0] * 10) / 10;
+			let axis1 = Math.round(pad.axes[1] * 10) / 10;
+			let cord = {x: 0, y: 0};
+			if(Math.abs(axis0) + Math.abs(axis1) >= this._minDelta) {
+				if(axis0 > this._minDelta / 2) cord.x = 1;
+				if(axis0 < -this._minDelta / 2) cord.x = -1;
+				if(axis1 > this._minDelta / 2) cord.y = 1;
+				if(axis1 < -this._minDelta / 2) cord.y = -1;
+				this._dpadEventPressed({id:pad.id, index:pad.index}, cord);
 			}
+			
+			if(JSON.stringify(cord) === JSON.stringify(pad._axisLast)) continue;
+			
+			if(JSON.stringify(pad._axisLast) !== JSON.stringify({x: 0, y: 0})) {
+				this._dpadEventUp({id:pad.id, index:pad.index}, pad._axisLast);
+			}
+			if(JSON.stringify(cord) !== JSON.stringify({x: 0, y: 0})) {
+				this._dpadEventDown({id:pad.id, index:pad.index}, cord);
+			}
+			
+			pad._axisLast = cord;
+			
 		}
 	}
 	
@@ -121,11 +116,13 @@ export default class ControllerListener {
 		
 		for(let pad of navigatorGamepads) {
 			if(!pad || this._gamepads.includes(pad)) continue;
+			pad._btnLast = [];
+			pad._axisLast = {x: 0, y: 0};
 			this._gamepads.push(pad);
 			this._onEventConnect(pad);
 		}
 		
-		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []){
+		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []) {
 			this._onEventDisconnect(pad);
 		}
 		
@@ -138,7 +135,7 @@ export default class ControllerListener {
 	 *     <li>up</li>
 	 *     <li>down</li></ul>
 	 * @param {String} key - The name of the event
-	 * @param {function(String: name, Object: button)} callback - The function, which are going to be called
+	 * @param {function(String: name, Object: button)} callback - The function, which is going to be called
 	 */
 	setButtonCallback(key, callback) {
 		this["_btnCallback" + upperFirst(key.toLowerCase())] = callback;
@@ -146,13 +143,11 @@ export default class ControllerListener {
 	
 	/**
 	 * This function is used to set the induvidually events.
-	 * <ul><li>up</li>
-	 *     <li>right</li>
-	 *     <li>down</li>
-	 *     <li>left</li>
-	 *     <li>Waiting - When nothing happens</li></ul>
+	 * <ul><li>pressed</li>
+	 *     <li>up</li>
+	 *     <li>down</li></ul>
 	 * @param {String} key - The name of the event
-	 * @param {function(String: name, Object)} callback - The function, which are going to be
+	 * @param {function(String: name, Object)} callback - The function, which is going to be
 	 * called
 	 */
 	setDPadCallback(key, callback) {
@@ -164,18 +159,26 @@ export default class ControllerListener {
 	 * <ul><li>connect</li>
 	 *     <li>disconnect</li></ul>
 	 * @param {String} key - The name of the event
-	 * @param {function(Object: pad)} callback - The function, which are going to be
+	 * @param {function(Object: pad)} callback - The function, which is going to be
 	 * called
 	 */
 	setGlobalEvents(key, callback) {
 		this["_onEvent" + upperFirst(key.toLowerCase())] = callback;
 	}
 	
+	//	/**
+	//	 * Get the current direction from the d-pad
+	//	 * @returns {{x : number, y : number}}
+	//	 */
+	//	getDPadDirection() {
+	//		return pad._dpadDirection;
+	//	}
+	
 	/**
-	 * Get the current direction from the d-pad
-	 * @returns {{x : number, y : number}}
+	 * This function sets the accurancy (a float between 0 and 1) for the dpad trigger event
+	 * @param {number} accurancy
 	 */
-	getDPadDirection() {
-		return this._dpadDirection;
+	setDpadDelta(accurancy) {
+		this._minDelta = Math.abs(accurancy);
 	}
 }
