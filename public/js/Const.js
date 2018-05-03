@@ -37,5 +37,6 @@ export const DIRECTION = {
 	UP: new createjs.Point(0,-1),
 	DOWN: new createjs.Point(0,1),
 	LEFT: new createjs.Point(-1,0),
-	RIGHT: new createjs.Point(1,0)
+	RIGHT: new createjs.Point(1,0),
+	WAITING: new createjs.Point(0,0)
 };

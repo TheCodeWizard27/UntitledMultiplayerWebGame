@@ -17,8 +17,7 @@ export default class ControllerListener {
 		this._btnCallbackPressed = () => {};
 		this._btnCallbackDown = () => {};
 		this._btnCallbackUp = () => {};
-		
-		this._dpadDirection = {x: 0, y: 0};
+		this._btnLast = [];
 		
 		this._dpadEventUp = () => {};
 		this._dpadEventRight = () => {};
@@ -26,7 +25,8 @@ export default class ControllerListener {
 		this._dpadEventLeft = () => {};
 		this._dpadEventWaiting = () => {};
 		
-		this._btnLast = [];
+		this._dpadDirection = DIRECTION.WAITING;
+		
 		this._i = 0;
 	}
 	
@@ -35,7 +35,7 @@ export default class ControllerListener {
 	 */
 	start() {
 		this._scanGamePads(this);
-		this._loopInterval = setInterval(this._loop, 10, this);
+		this._loopInterval = setInterval(this._loop.bind(this), 10, this);
 	}
 	
 	/**
@@ -51,15 +51,15 @@ export default class ControllerListener {
 		return false;
 	}
 	
-	_loop(base) {
-		// After every 5 loop sycles the scan function is going to get called
-		if(base._i >= 5) {
-			base._scanGamePads(base);
-			base._i = 0;
-		} else base._i++;
+	_loop() {
+		// After every 10 loop sycles the scan function is going to get called
+		if(this._i >= 10) {
+			this._scanGamePads();
+			this._i = 0;
+		} else this._i++;
 		
 		let nowPressed = [];
-		for(let pad of base._gamepads) {
+		for(let pad of this._gamepads) {
 			// Buttons
 			for(let nr = 0; nr < pad.buttons.length; nr++) {
 				let btn = pad.buttons[nr];
@@ -67,70 +67,69 @@ export default class ControllerListener {
 				
 				if(!btn.pressed) continue;
 				
-				if(!base._btnLast.includes(nr)) {
-					base._btnLast.push(nr);
-					base._btnCallbackDown(pad.id, btn);
+				if(!this._btnLast.includes(nr)) {
+					this._btnLast.push(nr);
+					this._btnCallbackDown(pad.id, btn);
 				}
 				
-				base._btnCallbackPressed(pad.id, btn);
+				this._btnCallbackPressed(pad.id, btn);
 				nowPressed.push(nr);
 			}
 			
-			for(let last of base._btnLast) {
+			for(let last of this._btnLast) {
 				if(!nowPressed.includes(last)) {
 					let btn = pad.buttons[last];
 					btn.nr = last;
-					base._btnCallbackUp(pad.id, btn);
+					this._btnCallbackUp(pad.id, btn);
 				}
 			}
-			base._btnLast = nowPressed;
+			this._btnLast = nowPressed;
 			
 			// D-Pad axes
 			let axis = Math.abs(pad.axes[9]); // TODO I have no clue why index 9?!
 			switch(axis) {
 				// Up
 			case 1:
-				base._dpadDirection = DIRECTION.UP;
-				base._dpadEventUp(pad.id, base._dpadDirection);
+				this._dpadDirection = DIRECTION.UP;
+				this._dpadEventUp(pad.id, this._dpadDirection);
 				break;
 				// Right
 			case 0.4285714030265808:
-				base._dpadDirection = DIRECTION.RIGHT;
-				base._dpadEventRight(pad.id, base._dpadDirection);
+				this._dpadDirection = DIRECTION.RIGHT;
+				this._dpadEventRight(pad.id, this._dpadDirection);
 				break;
 				// Down
 			case 0.14285719394683838:
-				base._dpadDirection = DIRECTION.DOWN;
-				base._dpadEventDown(pad.id, base._dpadDirection);
+				this._dpadDirection = DIRECTION.DOWN;
+				this._dpadEventDown(pad.id, this._dpadDirection);
 				break;
 				// Left
 			case 0.7142857313156128:
-				base._dpadDirection = DIRECTION.LEFT;
-				base._dpadEventLeft(pad.id, base._dpadDirection);
+				this._dpadDirection = DIRECTION.LEFT;
+				this._dpadEventLeft(pad.id, this._dpadDirection);
 				break;
 				// Default
 			default:
-				base._dpadDirection = new createjs.Point(0,0);
-				base._dpadEventWaiting(pad.id, base._dpadDirection);
+				this._dpadDirection = DIRECTION.WAITING;
+				this._dpadEventWaiting(pad.id, this._dpadDirection);
 			}
 		}
 	}
 	
-	_scanGamePads(base) {
+	_scanGamePads() {
 		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
 		
 		for(let pad of navigatorGamepads) {
-			if(!pad || base._gamepads.includes(pad)) continue;
-			base._gamepads.push(pad);
-			console.log(pad);
-			base._onEventConnect(pad);
+			if(!pad || this._gamepads.includes(pad)) continue;
+			this._gamepads.push(pad);
+			this._onEventConnect(pad);
 		}
 		
-		for(let pad of base._gamepads.filter(x => !navigatorGamepads.includes(x)) || []){
-			base._onEventDisconnect(pad);
+		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []){
+			this._onEventDisconnect(pad);
 		}
 		
-		base._gamepads = base._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
+		this._gamepads = this._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
 	}
 	
 	/**
@@ -165,7 +164,7 @@ export default class ControllerListener {
 	 * <ul><li>connect</li>
 	 *     <li>disconnect</li></ul>
 	 * @param {String} key - The name of the event
-	 * @param {function(String: name, Object)} callback - The function, which are going to be
+	 * @param {function(Object: pad)} callback - The function, which are going to be
 	 * called
 	 */
 	setGlobalEvents(key, callback) {
