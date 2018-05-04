@@ -1,5 +1,7 @@
 'use strict';
 import Graphics from "./Graphics.js";
+import Marker from "./Marker.js";
+import {DIRECTION} from "./Const.js";
 
 /**
  * Player Class holds information about the position, the direction, the score, all markers.
@@ -12,13 +14,37 @@ export default class Player{
 	 */
 	constructor(pos){
 		this._pos = pos;
-		this._dir = new createjs.Point(0,1);
+		this._dir = DIRECTION.DOWN;
 		this._markers = [];
 		this._markCooldown = 0;
 		this._walking = false;
 		this._keyBuffer = new Set();
 		this._score = 0;
+		
 		this._sprite = Graphics.getInstance().createPlayer();
+	}
+	
+	update() {
+		this.handleInput();
+		
+		if(this._markCooldown > 0){ this._markCooldown--; }
+		
+		this._markers.forEach(function(value) {
+			value.update();
+		});
+	}
+	
+	handleInput(){
+		this._keyBuffer.forEach(function(value){
+			switch(value.nr){
+			case 1:
+				this.mark();
+				break;
+			default:
+				console.log(value);
+				break;
+			}
+		}.bind(this));
 	}
 	
 	/**
@@ -26,9 +52,10 @@ export default class Player{
 	 */
 	mark(){
 		if(this._markCooldown <= 0){
-			//TODO add Marker shoot code
+			this._markers.push(new Marker(this._pos, this._dir));
+			this._markCooldown = 7;
 		}
-	}
+	};
 	
 	/**
 	 * adds input to player

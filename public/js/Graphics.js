@@ -23,7 +23,8 @@ let Graphics = {
 				 */
 				init : function(){
 					let manifest = [
-						{src: "link.png", id: "Link"}
+						{src: "link.png", id: "Link"},
+						{src: "bullet.png", id: "Bullet"}
 					];
 					this._loader.addEventListener("complete", this.completedLoading.bind(this));
 					this._loader.loadManifest(manifest, true, "assets/textures/");
@@ -51,9 +52,13 @@ let Graphics = {
 							"wUp" : {frames : [13,14,15,12], next: "wUp", speed: 1}
 						}
 					});
+					this._markerSheet = new createjs.SpriteSheet({
+						"images": [this._loader.getResult("Bullet")],
+						"frames": {"width": 32, "height":32}
+					});
 					
 					//init game loop after loading
-					createjs.Ticker.addEventListener("tick", gameController.update.bind(gameController));
+					gameController.start();
 				},
 				
 				/**
@@ -70,7 +75,9 @@ let Graphics = {
 					//TODO createCollectable Sprite with return
 				},
 				createMarker : function(){
-					//TODO create marker sprite with return
+					let tempSprite = new createjs.Sprite(this._markerSheet);
+					this._stage.addChild(tempSprite);
+					return tempSprite;
 				},
 				
 				/**

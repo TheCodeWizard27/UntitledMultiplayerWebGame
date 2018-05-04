@@ -21,7 +21,27 @@ let GameObj = {
 				_collectables: [],
 				
 				addPlayer : function(identifier){
-					this._playerList[identifier] = new Player(new createjs.Point(0,0));
+					if(this._playerList.size < 4){
+						this._playerList.set(identifier, new Player(new createjs.Point(0,0)));
+					}
+				},
+				removePlayer : function(identifier){
+					if(this._playerList.has(identifier)){
+						this._playerList.get(identifier).delete();
+						this._playerList.delete(identifier);
+					}
+				},
+				addPlayerKey : function(identifier,key){
+					if(this._playerList.has(identifier)){this._playerList.get(identifier).addKey(key);}
+				},
+				removePlayerKey : function(identifier,key){
+					if(this._playerList.has(identifier)){this._playerList.get(identifier).removeKey(key);}
+				},
+				
+				update : function(){
+					this._playerList.forEach(function(value, key, map){
+						value.update();
+					});
 				}
 			}
 		}
