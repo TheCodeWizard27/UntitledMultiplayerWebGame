@@ -10,10 +10,10 @@ window.addEventListener("load", () => {
 		
 		canvas.style.width = window.innerWidth.toString()+"px";
 		canvas.style.height = (SC.GAME.GRID_HEIGHT*faktor).toString()+"px";
-	};*/
+	};
 	windowResize();
+	window.onresize = windowResize;*/
 	
-	window.onresize = windowResize;
 	GameController.getInstance().init();
 	
 	/*
@@ -23,7 +23,7 @@ window.addEventListener("load", () => {
 	
 	cl.setButtonCallback("down", (id, btn)=>console.log("BTN DOWN %s %o", id, btn));
 	cl.setButtonCallback("up", (id, btn)=>console.log("BTN UP %s %o", id, btn));
-//	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
+	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
 	
 	cl.setDPadCallback("down", (id, axis) => console.log("AXIS DOWN %s %o", id, axis));
 	cl.setDPadCallback("up", (id, axis) => console.log("AXIS UP %s %o", id, axis));
