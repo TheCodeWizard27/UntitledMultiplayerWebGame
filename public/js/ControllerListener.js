@@ -1,7 +1,6 @@
 "use strict";
 
 import {upperFirst, comparePoints} from "./functions.js";
-import {DIRECTION as D} from "./Const.js";
 
 /**
  * This Listener triggers events, when something happens on a phisical game controller.
@@ -90,7 +89,7 @@ export default class ControllerListener {
 			
 			let axis0 = pad.axes[0];
 			let axis1 = pad.axes[1];
-			let cord = D.WAITING.clone();
+			let cord = DIRECTION.WAITING.clone();
 			if(Math.abs(axis0) + Math.abs(axis1) >= this._minDelta) {
 				if(axis0 > this._minDelta / 2) cord.x = 1;
 				if(axis0 < -this._minDelta / 2) cord.x = -1;
@@ -101,10 +100,10 @@ export default class ControllerListener {
 			
 			if(comparePoints(cord, pad._axisLast)) continue;
 			
-			if(!comparePoints(pad._axisLast, D.WAITING)) {
+			if(!comparePoints(pad._axisLast, DIRECTION.WAITING)) {
 				this._dpadEventUp({id: pad.id, index: pad.index}, pad._axisLast);
 			}
-			if(!comparePoints(cord, D.WAITING)) {
+			if(!comparePoints(cord, DIRECTION.WAITING)) {
 				this._dpadEventDown({id: pad.id, index: pad.index}, cord);
 			}
 			
@@ -119,7 +118,7 @@ export default class ControllerListener {
 		for(let pad of navigatorGamepads) {
 			if(!pad || this._gamepads.includes(pad)) continue;
 			pad._btnLast = [];
-			pad._axisLast = D.WAITING;
+			pad._axisLast = DIRECTION.WAITING;
 			this._gamepads.push(pad);
 			this._onEventConnect(pad);
 		}

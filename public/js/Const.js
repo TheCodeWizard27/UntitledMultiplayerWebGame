@@ -30,8 +30,7 @@ const CONTROLLER = {
 	DOWN: "down",
 	GLOBAL: {
 		CONNECT: "connect",
-		DISCONNECT:
-			"disconnect"
+		DISCONNECT: "disconnect"
 	}
 };
 

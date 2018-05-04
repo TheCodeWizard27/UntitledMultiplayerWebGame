@@ -20,12 +20,12 @@ let GameController = {
 					this._gameObj = GameObj.getInstance();
 					
 					this._controllerListener = new ControllerListener();
-					this._controllerListener.setGlobalEvents("connect", this.controllerConnect.bind(this));
-					this._controllerListener.setGlobalEvents("disconnect", this.controllerDisconnect.bind(this));
-					this._controllerListener.setButtonCallback("down", this.controllerBtnDown.bind(this));
-					this._controllerListener.setButtonCallback("up", this.controllerBtnUp.bind(this));
-					this._controllerListener.setDPadCallback("down", this.controllerDPadDown.bind(this));
-					this._controllerListener.setDPadCallback("up", this.controllerDPadUp.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, this.controllerConnect.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, this.controllerDisconnect.bind(this));
+					this._controllerListener.setButtonCallback(CONTROLLER.DOWN, this.controllerBtnDown.bind(this));
+					this._controllerListener.setButtonCallback(CONTROLLER.UP, this.controllerBtnUp.bind(this));
+					this._controllerListener.setDPadCallback(CONTROLLER.DOWN, this.controllerDPadDown.bind(this));
+					this._controllerListener.setDPadCallback(CONTROLLER.UP, this.controllerDPadUp.bind(this));
 				},
 				
 				start : function(){

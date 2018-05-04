@@ -13,7 +13,4 @@ export function upperFirst(str) {
  * Compare all passed  {@link createjs.Point points}
  * @returns {boolean}
  */
-export function comparePoints(){
-	if(arguments.length < 2) throw new Error("To little args");
-	return Array.prototype.every.call(arguments, (el,i,arr)=> arr[0].x === el.x && arr[0].y === el.y);
-}
+export function comparePoints(pt1, pt2) { return pt1.x === pt2.x && pt1.y === pt2.y;}
