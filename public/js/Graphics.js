@@ -27,7 +27,8 @@ let Graphics = {
 						{src: "bullet.png", id: "Bullet"}
 					];
 					this._loader.addEventListener("complete", this.completedLoading.bind(this));
-					this._loader.loadManifest(manifest, true, "assets/textures/");
+					this._loader.loadManifest(manifest, false, "./assets/textures/");
+					this._loader.load();
 				},
 
 				/**
@@ -42,7 +43,7 @@ let Graphics = {
 						"images": [this._loader.getResult("Link")],
 						"frames": {"width": 32, "height": 48},
 						"animations" : {
-							"fDown" : [0,0,"fDown",0.1],	//TODO Idle animations
+							"fDown" : [0,0,"fDown",0.1],	//TODO Benny Idle animations
 							"fLeft" : [4,4,"fLeft",0.1],
 							"fRight" : [8,8,"fRight",0.1],
 							"fUp" : [12,12,"fUp",0.1],
@@ -72,7 +73,7 @@ let Graphics = {
 				},
 				
 				createCollectable : function(){
-					//TODO createCollectable Sprite with return
+					//TODO Benny createCollectable Sprite with return
 				},
 				createMarker : function(){
 					let tempSprite = new createjs.Sprite(this._markerSheet);

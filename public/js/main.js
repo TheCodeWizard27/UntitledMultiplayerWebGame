@@ -16,6 +16,8 @@ window.addEventListener("load", () => {
 	
 	GameController.getInstance().init();
 	
+	
+	
 //	let cl = new ControllerListener();
 //	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("CONNECT %o", pad));
 //	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("DISCONNECT %o", pad));

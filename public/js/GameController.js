@@ -2,6 +2,7 @@
 import Graphics from "./Graphics.js";
 import GameObj from "./GameObj.js";
 import ControllerListener from "./ControllerListener.js";
+import {uuid} from "./functions.js";
 
 let GameController = {
 	_gameController : null,
@@ -31,6 +32,15 @@ let GameController = {
 				start : function(){
 					createjs.Ticker.addEventListener("tick", this.update.bind(this));
 					this._controllerListener.start();
+					
+					socket.on("NEW_PLAYER", (player)=>{
+						this._gameObj.addPlayer(player);
+					});
+					
+					socket.on("SEND_DATA", (player)=>{
+						this._gameObj._playerList.set(player._id, player);
+					});
+					
 				},
 				
 				update : function(){
@@ -43,7 +53,7 @@ let GameController = {
 				 * @param pad	the controller with identifier
 				 */
 				controllerConnect : function(pad){
-					this._gameObj.addPlayer(pad.index);
+					this._gameObj.addPlayer(uuid()); // TODO Lukas
 				},
 				/**
 				 * remove disconnected controller with player

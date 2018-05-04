@@ -41,3 +41,5 @@ const DIRECTION = {
 	RIGHT: new createjs.Point(1, 0),
 	WAITING: new createjs.Point(0, 0)
 };
+
+const socket = io();

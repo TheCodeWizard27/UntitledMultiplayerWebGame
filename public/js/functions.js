@@ -14,3 +14,12 @@ export function upperFirst(str) {
  * @returns {boolean}
  */
 export function comparePoints(pt1, pt2) { return pt1.x === pt2.x && pt1.y === pt2.y;}
+
+export function uuid() {
+	function s4() {
+		return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+	}
+	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
