@@ -1,7 +1,6 @@
 'use strict';
 import Graphics from "./Graphics.js";
 import Marker from "./Marker.js";
-import {DIRECTION} from "./Const.js";
 
 /**
  * Player Class holds information about the position, the direction, the score, all markers.
@@ -20,7 +19,7 @@ export default class Player{
 		this._walking = false;
 		this._keyBuffer = new Set();
 		this._score = 0;
-		
+		this.i = 0;
 		this._sprite = Graphics.getInstance().createPlayer();
 	}
 	
@@ -35,16 +34,14 @@ export default class Player{
 	}
 	
 	handleInput(){
-		this._keyBuffer.forEach(function(value){
+		for(let value of this._keyBuffer){
 			switch(value.nr){
 			case 1:
 				this.mark();
 				break;
-			default:
-				console.log(value);
-				break;
 			}
-		}.bind(this));
+//			console.log(++this.i);
+		}
 	}
 	
 	/**
