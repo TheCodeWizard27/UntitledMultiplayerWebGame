@@ -1,6 +1,5 @@
 "use strict";
 //import io from "socket.io-client";
-import {SERVER_CONFIGURATION as SC} from "./Const.js";
 import GameController from "./GameController.js";
 import ControllerListener from "./ControllerListener.js";
 
@@ -23,10 +22,11 @@ window.addEventListener("load", () => {
 	
 	cl.setButtonCallback("down", (id, btn)=>console.log("BTN DOWN %s %o", id, btn));
 	cl.setButtonCallback("up", (id, btn)=>console.log("BTN UP %s %o", id, btn));
-	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
+//	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
 	
 	cl.setDPadCallback("down", (id, axis) => console.log("AXIS DOWN %s %o", id, axis));
 	cl.setDPadCallback("up", (id, axis) => console.log("AXIS UP %s %o", id, axis));
 	
 	cl.start();
+	
 });

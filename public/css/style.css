@@ -17,8 +17,8 @@ body {
 }
 
 #window {
-	margin: 10px;
-	width: 100vw;
-	height: calc((100vw / 1380)*680);
+	margin:           10px;
+	width:            100vw;
+	height:           calc((100vw / 1380) * 680);
 	background-color: white;
 }
