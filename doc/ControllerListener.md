@@ -16,5 +16,9 @@ Die setzt die Events fest, welche aufgerufen wird, wenn etwas bei den Knöpfeh p
 Die setzt die Events fest, welche aufgerufen wird, wenn etwas auf dem Steuerknüpel passiert.
 ###setGlobalEvents
 Die setzt die Events fest, welche aufgerufen wird, wenn ein Kontroller verbunden oder getrennt wird.
-###getDPadDirection
-Diese Funktion liefert immer den aktuellen Wert des Steuerknüpels.
+###setDpadDelta
+Setzt die Genauigkeit eines analogen Kontroller Knüppels, ab welcher Verschiebdistanz zur Mitte die Events getriggert werden.
+###setIntervalDelay
+Setzt die Zeitspanne in Milisekunden zwischen den Trigger Eventen
+###reload
+Setzt das gesetzte Delay zwischen den Perionen in kraft

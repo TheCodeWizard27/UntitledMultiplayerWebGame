@@ -3,7 +3,8 @@
 import {upperFirst} from "./functions.js";
 
 /**
- * This Listener triggers events, when something happens on a phisical game controller
+ * This Listener triggers events, when something happens on a phisical game controller.
+ * Start the listening period with the {@link start()} method
  */
 export default class ControllerListener {
 	
@@ -22,7 +23,7 @@ export default class ControllerListener {
 		this._dpadEventUp = () => {};
 		this._minDelta = 0.8;
 		
-		this.log = document.getElementById("log");
+		this._intervalDelay = 10;
 		
 		this._i = 0;
 	}
@@ -33,7 +34,7 @@ export default class ControllerListener {
 	start() {
 		this._scanGamePads(this);
 		console.table(this._gamepads);
-		this._loopInterval = setInterval(this._loop.bind(this), 10, this);
+		this._loopInterval = setInterval(this._loop.bind(this), this._intervalDelay);
 	}
 	
 	/**
@@ -68,10 +69,10 @@ export default class ControllerListener {
 				
 				if(!pad._btnLast.includes(nr)) {
 					pad._btnLast.push(nr);
-					this._btnCallbackDown({id:pad.id, index:pad.index}, btn);
+					this._btnCallbackDown({id: pad.id, index: pad.index}, btn);
 				}
 				
-				this._btnCallbackPressed({id:pad.id, index:pad.index}, btn);
+				this._btnCallbackPressed({id: pad.id, index: pad.index}, btn);
 				nowPressedButtons.push(nr);
 			}
 			
@@ -79,7 +80,7 @@ export default class ControllerListener {
 				if(!nowPressedButtons.includes(last)) {
 					let btn = pad.buttons[last];
 					btn.nr = last;
-					this._btnCallbackUp({id:pad.id, index:pad.index}, btn);
+					this._btnCallbackUp({id: pad.id, index: pad.index}, btn);
 				}
 			}
 			pad._btnLast = nowPressedButtons;
@@ -94,16 +95,16 @@ export default class ControllerListener {
 				if(axis0 < -this._minDelta / 2) cord.x = -1;
 				if(axis1 > this._minDelta / 2) cord.y = 1;
 				if(axis1 < -this._minDelta / 2) cord.y = -1;
-				this._dpadEventPressed({id:pad.id, index:pad.index}, cord);
+				this._dpadEventPressed({id: pad.id, index: pad.index}, cord);
 			}
 			
 			if(JSON.stringify(cord) === JSON.stringify(pad._axisLast)) continue;
 			
 			if(JSON.stringify(pad._axisLast) !== JSON.stringify({x: 0, y: 0})) {
-				this._dpadEventUp({id:pad.id, index:pad.index}, pad._axisLast);
+				this._dpadEventUp({id: pad.id, index: pad.index}, pad._axisLast);
 			}
 			if(JSON.stringify(cord) !== JSON.stringify({x: 0, y: 0})) {
-				this._dpadEventDown({id:pad.id, index:pad.index}, cord);
+				this._dpadEventDown({id: pad.id, index: pad.index}, cord);
 			}
 			
 			pad._axisLast = cord;
@@ -166,19 +167,28 @@ export default class ControllerListener {
 		this["_onEvent" + upperFirst(key.toLowerCase())] = callback;
 	}
 	
-	//	/**
-	//	 * Get the current direction from the d-pad
-	//	 * @returns {{x : number, y : number}}
-	//	 */
-	//	getDPadDirection() {
-	//		return pad._dpadDirection;
-	//	}
-	
 	/**
 	 * This function sets the accurancy (a float between 0 and 1) for the dpad trigger event
 	 * @param {number} accurancy
 	 */
 	setDpadDelta(accurancy) {
 		this._minDelta = Math.abs(accurancy);
+	}
+	
+	/**
+	 * Set the delay between the intervals.
+	 * After the change, you need to {@link reload()}
+	 * @param {number} delay
+	 */
+	setIntervalDelay(delay) {
+		this._intervalDelay = delay;
+	}
+	
+	/**
+	 * This function reloads the delay in the interval
+	 */
+	reload() {
+		this.stop();
+		this.start();
 	}
 }
