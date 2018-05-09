@@ -15,16 +15,14 @@ window.addEventListener("load", () => {
 	window.onresize = windowResize;*/
 	
 	GameController.getInstance().init();
-	
-	
-	
+//
 //	let cl = new ControllerListener();
 //	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("CONNECT %o", pad));
-//	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("DISCONNECT %o", pad));
+//	cl.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, pad => console.log("DISCONNECT %o", pad));
 //
-//	cl.setButtonCallback(CONTROLLER.DOWN, (id, btn)=>console.log("BTN DOWN %s %o", id, btn));
-//	cl.setButtonCallback(CONTROLLER.UP, (id, btn)=>console.log("BTN UP %s %o", id, btn));
-////	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
+//	cl.setButtonCallback(CONTROLLER.DOWN, (id, btn) => console.log("BTN DOWN %s %o", id, btn));
+//	cl.setButtonCallback(CONTROLLER.UP, (id, btn) => console.log("BTN UP %s %o", id, btn));
+//	//	cl.setButtonCallback("pressed", (id, btn)=>console.log("BTN PRESSED %s %o", id, btn));
 //
 //	cl.setDPadCallback(CONTROLLER.DOWN, (id, axis) => console.log("AXIS DOWN %s %o", id, axis));
 //	cl.setDPadCallback(CONTROLLER.UP, (id, axis) => console.log("AXIS UP %s %o", id, axis));

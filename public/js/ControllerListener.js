@@ -25,15 +25,15 @@ export default class ControllerListener {
 		
 		this._intervalDelay = 10;
 		
-		this._i = 0;
+		window.addEventListener("gamepadconnected", this._scanAddGamePad.bind(this));
+		window.addEventListener("gamepaddisconnected", this._scanRemoveGamePad.bind(this));
 	}
 	
 	/**
 	 * This function starts the listenning period
 	 */
 	start() {
-		this._scanGamePads(this);
-		console.table(this._gamepads);
+		this._scanAddGamePad();
 		this._loopInterval = setInterval(this._loop.bind(this), this._intervalDelay);
 	}
 	
@@ -51,15 +51,16 @@ export default class ControllerListener {
 	}
 	
 	_loop() {
-		// After every 10 loop sycles the scan function is going to get called
-		if(this._i >= 10) {
-			this._scanGamePads();
-			this._i = 0;
-		} else this._i++;
+		//		// After every 10 loop sycles the scan function is going to get called
+		//		if(this._i >= 10) {
+		//			this._scanGamePads();
+		//			this._i = 0;
+		//		} else this._i++;
+		
+		//console.table(this._gamepads);
 		
 		for(let pad of this._gamepads) {
 			let nowPressedButtons = [];
-			let nowPressedAxes = [];
 			// Buttons
 			for(let nr = 0; nr < pad.buttons.length; nr++) {
 				let btn = pad.buttons[nr];
@@ -112,7 +113,7 @@ export default class ControllerListener {
 		}
 	}
 	
-	_scanGamePads() {
+	_scanAddGamePad() {
 		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
 		
 		for(let pad of navigatorGamepads) {
@@ -122,13 +123,34 @@ export default class ControllerListener {
 			this._gamepads.push(pad);
 			this._onEventConnect(pad);
 		}
-		
+	}
+	
+	_scanRemoveGamePad() {
+		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
 		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []) {
 			this._onEventDisconnect(pad);
 		}
 		
 		this._gamepads = this._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
 	}
+	
+	//	_scanGamePads() {
+	//		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
+	//
+	//		for(let pad of navigatorGamepads) {
+	//			if(!pad || this._gamepads.includes(pad)) continue;
+	//			pad._btnLast = [];
+	//			pad._axisLast = DIRECTION.WAITING;
+	//			this._gamepads.push(pad);
+	//			this._onEventConnect(pad);
+	//		}
+	//
+	//		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []) {
+	//			this._onEventDisconnect(pad);
+	//		}
+	//
+	//		this._gamepads = this._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
+	//	}
 	
 	/**
 	 * This function is used to set the induvidually events.
