@@ -24,7 +24,9 @@ let Graphics = {
 				init : function(){
 					let manifest = [
 						{src: "link.png", id: "Link"},
-						{src: "bullet.png", id: "Bullet"}
+						{src: "bullet.png", id: "Bullet"},
+						{src: "trump_idle.png", id: "TrumpIdle"},
+						{src: "trump_run.png", id: "TrumpRun"}
 					];
 					this._loader.addEventListener("complete", this.completedLoading.bind(this));
 					this._loader.loadManifest(manifest, false, "./assets/textures/");
@@ -40,17 +42,21 @@ let Graphics = {
 					//player sprite sheet
 					this._playerSheet = new createjs.SpriteSheet({
 						framerate : 6,
-						"images": [this._loader.getResult("Link")],
-						"frames": {"width": 32, "height": 48},
+						"images": [this._loader.getResult("TrumpWalk"),this._loader.getResult("TrumpRun")],
+						"frames": {"width": 256, "height": 256},
 						"animations" : {
-							"fDown" : [0,0,"fDown",0.1],	//TODO Benny Idle animations
-							"fLeft" : [4,4,"fLeft",0.1],
-							"fRight" : [8,8,"fRight",0.1],
-							"fUp" : [12,12,"fUp",0.1],
-							"wDown" : {frames : [1,2,3,0], next: "wDown", speed: 1},
-							"wLeft" : {frames : [5,6,7,4], next: "wLeft", speed: 1},
-							"wRight" : {frames : [9,10,11,8], next: "wRight", speed: 1},
-							"wUp" : {frames : [13,14,15,12], next: "wUp", speed: 1}
+							"fDown" : [0,9,"fDown",0.1],	//TODO Benny Idle animations
+							"fRight" : [10,19,"fRight",0.1],
+							"fUp" : [20,29,"fUp",0.1],
+							"fLeft" : [30,39,"fLeft",0.1],
+							"wDown" : [40,45,"wDown",0.1],	//TODO Benny Idle animations
+							"wRight" : [46,51,"wRight",0.1],
+							"wUp" : [52,57,"wUp",0.1],
+							"wLeft" : [58,63,"wLeft",0.1]
+//							"wDown" : {frames : [1,2,3,0], next: "wDown", speed: 1},
+//							"wLeft" : {frames : [5,6,7,4], next: "wLeft", speed: 1},
+//							"wRight" : {frames : [9,10,11,8], next: "wRight", speed: 1},
+//							"wUp" : {frames : [13,14,15,12], next: "wUp", speed: 1}
 						}
 					});
 					this._markerSheet = new createjs.SpriteSheet({
