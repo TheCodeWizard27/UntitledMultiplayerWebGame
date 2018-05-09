@@ -23,11 +23,11 @@ let Graphics = {
 				 */
 				init : function(){
 					let manifest = [
-						{src: "link.png", id: "Link"},
-						{src: "bullet.png", id: "Bullet"}
+						{src: "assets/textures/link.png", id: "Link"},
+						{src: "assets/textures/bullet.png", id: "Bullet"}
 					];
 					this._loader.addEventListener("complete", this.completedLoading.bind(this));
-					this._loader.loadManifest(manifest, false, "./assets/textures/");
+					this._loader.loadManifest(manifest);
 					this._loader.load();
 				},
 
@@ -41,12 +41,12 @@ let Graphics = {
 					this._playerSheet = new createjs.SpriteSheet({
 						framerate : 6,
 						"images": [this._loader.getResult("Link")],
-						"frames": {"width": 32, "height": 48},
+						"frames": {"width": 31, "height": 48},
 						"animations" : {
-							"fDown" : [0,0,"fDown",0.1],	//TODO Benny Idle animations
-							"fLeft" : [4,4,"fLeft",0.1],
-							"fRight" : [8,8,"fRight",0.1],
-							"fUp" : [12,12,"fUp",0.1],
+							"fDown" : [0,1,"fDown",0.1],	//TODO Benny Idle animations
+							"fLeft" : [4,5,"fLeft",0.1],
+							"fRight" : [8,9,"fRight",0.1],
+							"fUp" : [12,13,"fUp",0.1],
 							"wDown" : {frames : [1,2,3,0], next: "wDown", speed: 1},
 							"wLeft" : {frames : [5,6,7,4], next: "wLeft", speed: 1},
 							"wRight" : {frames : [9,10,11,8], next: "wRight", speed: 1},

@@ -19,18 +19,19 @@ let GameController = {
 					this._graphics = Graphics.getInstance(this._stage);
 					this._graphics.init();
 					this._gameObj = GameObj.getInstance();
-					
-					this._controllerListener = new ControllerListener();
-					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, this.controllerConnect.bind(this));
-					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, this.controllerDisconnect.bind(this));
-					this._controllerListener.setButtonCallback(CONTROLLER.DOWN, this.controllerBtnDown.bind(this));
-					this._controllerListener.setButtonCallback(CONTROLLER.UP, this.controllerBtnUp.bind(this));
-					this._controllerListener.setDPadCallback(CONTROLLER.DOWN, this.controllerDPadDown.bind(this));
-					this._controllerListener.setDPadCallback(CONTROLLER.UP, this.controllerDPadUp.bind(this));
 				},
 				
 				start : function(){
 					createjs.Ticker.addEventListener("tick", this.update.bind(this));
+					
+					this._controllerListener = new ControllerListener();
+					this._controllerListener.setButtonCallback(CONTROLLER.DOWN, this.controllerBtnDown.bind(this));
+					this._controllerListener.setButtonCallback(CONTROLLER.UP, this.controllerBtnUp.bind(this));
+					this._controllerListener.setDPadCallback(CONTROLLER.DOWN, this.controllerDPadDown.bind(this));
+					this._controllerListener.setDPadCallback(CONTROLLER.UP, this.controllerDPadUp.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, this.controllerConnect.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, this.controllerDisconnect.bind(this));
+					
 					this._controllerListener.start();
 					
 					socket.on("NEW_PLAYER", (player)=>{
@@ -53,7 +54,7 @@ let GameController = {
 				 * @param pad	the controller with identifier
 				 */
 				controllerConnect : function(pad){
-					this._gameObj.addPlayer(uuid()); // TODO Lukas
+					this._gameObj.addPlayer(pad.index); // TODO Lukas
 				},
 				/**
 				 * remove disconnected controller with player
@@ -86,7 +87,7 @@ let GameController = {
 				 * @param axis	which direction was pressed
 				 */
 				controllerDPadDown : function(id, axis){
-					this._gameObj.addPlayerKey(id.index, createjs.Point(axis.x, axis.y));
+					this._gameObj.addPlayerKey(id.index, this._getDirectionfromString(axis.toString()));
 				},
 				/**
 				 * removes direction to Player with keybuffer
@@ -94,7 +95,16 @@ let GameController = {
 				 * @param axis	which direction was released
 				 */
 				controllerDPadUp : function(id, axis){
-					this._gameObj.removePlayerKey(id.index, createjs.Point(axis.x, axis.y));
+					this._gameObj.removePlayerKey(id.index, this._getDirectionfromString(axis.toString()));
+				},
+				
+				_getDirectionfromString : function(string){
+					switch(string){
+					case DIRECTION.UP.toString():	return DIRECTION.UP;
+					case DIRECTION.DOWN.toString():	return DIRECTION.DOWN;
+					case DIRECTION.RIGHT.toString():return DIRECTION.RIGHT;
+					case DIRECTION.LEFT.toString():	return DIRECTION.LEFT;
+					}
 				}
  			}
 		}

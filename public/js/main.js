@@ -15,8 +15,8 @@ window.addEventListener("load", () => {
 	windowResize();
 	window.onresize = windowResize;*/
 	
-// GameController.getInstance().init();
-
+	GameController.getInstance().init();
+/*
 	let cl = new ControllerListener();
 	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("CONNECT %o", pad));
 	cl.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, pad => console.log("DISCONNECT %o", pad));
@@ -30,5 +30,5 @@ window.addEventListener("load", () => {
 	// cl.setDPadCallback(CONTROLLER.PRESSED, (id, axis) => console.log("AXIS PRESSED %s %o", id, axis));
 
 	cl.start();
-
+*/
 });
