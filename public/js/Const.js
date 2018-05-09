@@ -25,14 +25,15 @@ const GAME_CONF = {
 };
 
 const CONTROLLER = {
-	PRESSED: "pressed",
-	UP: "up",
-	DOWN: "down",
-	GLOBAL: {
-		CONNECT: "connect",
-		DISCONNECT: "disconnect"
+		PRESSED: "pressed",
+		UP: "up",
+		DOWN: "down",
+		GLOBAL: {
+			CONNECT: "connect",
+			DISCONNECT: "disconnect"
+		}
 	}
-};
+;
 
 const DIRECTION = {
 	UP: new createjs.Point(0, -1),

@@ -4,7 +4,7 @@ import {upperFirst, comparePoints} from "./functions.js";
 
 /**
  * This Listener triggers events, when something happens on a phisical game controller.
- * Start the listening period with the {@link start()} method
+ * Start the listening period with the {@link ControllerListener.start()} method
  */
 export default class ControllerListener {
 	
@@ -25,15 +25,16 @@ export default class ControllerListener {
 		
 		this._intervalDelay = 10;
 		
-		this._i = 0;
+		window.addEventListener("gamepadconnected", this._scanAddGamePads.bind(this));
+		window.addEventListener("gamepaddisconnected", this._scanRemoveGamePads.bind(this));
 	}
 	
 	/**
 	 * This function starts the listenning period
 	 */
 	start() {
-		this._scanGamePads(this);
-		console.table(this._gamepads);
+		if(this._loopInterval) return;
+		this._scanAddGamePads();
 		this._loopInterval = setInterval(this._loop.bind(this), this._intervalDelay);
 	}
 	
@@ -51,15 +52,10 @@ export default class ControllerListener {
 	}
 	
 	_loop() {
-		// After every 10 loop sycles the scan function is going to get called
-		if(this._i >= 10) {
-			this._scanGamePads();
-			this._i = 0;
-		} else this._i++;
 		
 		for(let pad of this._gamepads) {
+			navigator.getGamepads();
 			let nowPressedButtons = [];
-			let nowPressedAxes = [];
 			// Buttons
 			for(let nr = 0; nr < pad.buttons.length; nr++) {
 				let btn = pad.buttons[nr];
@@ -85,16 +81,35 @@ export default class ControllerListener {
 			}
 			pad._btnLast = nowPressedButtons;
 			
-			// D-Pad axes
-			
 			let axis0 = pad.axes[0];
 			let axis1 = pad.axes[1];
+			// D-Pad axes
 			let cord = DIRECTION.WAITING.clone();
 			if(Math.abs(axis0) + Math.abs(axis1) >= this._minDelta) {
 				if(axis0 > this._minDelta / 2) cord.x = 1;
-				if(axis0 < -this._minDelta / 2) cord.x = -1;
+				else if(axis0 < -this._minDelta / 2) cord.x = -1;
+				
 				if(axis1 > this._minDelta / 2) cord.y = 1;
-				if(axis1 < -this._minDelta / 2) cord.y = -1;
+				else if(axis1 < -this._minDelta / 2) cord.y = -1;
+				
+				if(cord.x !== 0 && cord.y !== 0) {
+					if(pad._multiKeyPresses) continue;
+					if(cord.x === pad._axisLast.x) cord.x = 0;
+					else if(cord.y === pad._axisLast.y) cord.y = 0;
+					else cord = DIRECTION.WAITING.clone();
+					pad._multiKeyPresses = true;
+				} else {
+					pad._multiKeyPresses = false;
+				}
+			}
+			
+			if(cord.x === 0 && cord.y === 0) cord = DIRECTION.WAITING;
+			if(cord.x === 1 && cord.y === 0) cord = DIRECTION.RIGHT;
+			if(cord.x === 0 && cord.y === 1) cord = DIRECTION.DOWN;
+			if(cord.x === -1 && cord.y === 0) cord = DIRECTION.LEFT;
+			if(cord.x === 0 && cord.y === -1) cord = DIRECTION.UP;
+			
+			if(!comparePoints(cord, DIRECTION.WAITING)) {
 				this._dpadEventPressed({id: pad.id, index: pad.index}, cord);
 			}
 			
@@ -107,22 +122,25 @@ export default class ControllerListener {
 				this._dpadEventDown({id: pad.id, index: pad.index}, cord);
 			}
 			
-			pad._axisLast = cord;
-			
+			pad._axisLast = cord.clone();
 		}
 	}
 	
-	_scanGamePads() {
+	_scanAddGamePads() {
 		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
 		
 		for(let pad of navigatorGamepads) {
 			if(!pad || this._gamepads.includes(pad)) continue;
 			pad._btnLast = [];
-			pad._axisLast = DIRECTION.WAITING;
+			pad._axisLast = DIRECTION.WAITING.clone();
+			pad._multiKeyPresses = false;
 			this._gamepads.push(pad);
 			this._onEventConnect(pad);
 		}
-		
+	}
+	
+	_scanRemoveGamePads() {
+		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
 		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []) {
 			this._onEventDisconnect(pad);
 		}
