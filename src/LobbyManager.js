@@ -15,7 +15,7 @@ class LobbyManager {
 				return;
 			}
 		}
-		let newLobby = new Lobby(this.i++, player); // TODO Change id to a better value
+		let newLobby = new Lobby(this.i++, player); // TODO Lukas Change id to a better values
 		let res = newLobby.start();
 		this._lobbies.push([newLobby, res]);
 	}

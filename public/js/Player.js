@@ -11,7 +11,7 @@ export default class Player{
 	 * Creates Player Object
 	 * @param graphics for deleting adding sprites to stage
 	 */
-	constructor(pos){
+	constructor(pos, id){
 		this._pos = pos;
 		this._dir = DIRECTION.DOWN;
 		this._markers = [];
@@ -19,12 +19,16 @@ export default class Player{
 		this._walking = false;
 		this._keyBuffer = new Set();
 		this._score = 0;
-		this.i = 0;
+		this._id = id;
 		this._sprite = Graphics.getInstance().createPlayer();
+		
+		socket.emit("I_AM_NEW", this);
 	}
 	
 	update() {
 		this.handleInput();
+		
+		socket.emit("RECEIVE_DATA", this);
 		
 		if(this._markCooldown > 0){ this._markCooldown--; }
 		
@@ -40,7 +44,6 @@ export default class Player{
 				this.mark();
 				break;
 			}
-//			console.log(++this.i);
 		}
 	}
 	

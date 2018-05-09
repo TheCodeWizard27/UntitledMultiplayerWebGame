@@ -13,7 +13,7 @@ class Lobby {
 	}
 	
 	tryToAddPlayer(player) {
-		if(this._players.length < SC.GAME.MAX_PLAYER) {
+		if(this._players.length < SC.GAME_CONF.MAX_PLAYER) {
 			player.setLobby(this);
 			this._players.push(player);
 			return true;
@@ -29,7 +29,7 @@ class Lobby {
 		return new Promise(this._startAsync);
 	}
 	
-	// TODO GAMELOOP
+	// TODO Lukas GAMELOOP
 	_startAsync(resolve, reject) {
 		// THIS HERE IS ASYNC
 		console.log(this);

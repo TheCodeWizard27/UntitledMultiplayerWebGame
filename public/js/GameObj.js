@@ -14,15 +14,16 @@ let GameObj = {
 	 * creates one time only GameObj instance
 	 */
 	getInstance: function() {
+		
 		if(this._gameObj == null) {
 			//creates new GameObj Object
 			this._gameObj = {
 				_playerList: new Map(),
 				_collectables: [],
-				
+
 				addPlayer : function(identifier){
-					if(this._playerList.size < 4){
-						this._playerList.set(identifier, new Player(new createjs.Point(0,0)));
+					if(this._playerList.size < 4 && !this._playerList.has(identifier)){
+						this._playerList.set(identifier, new Player(new createjs.Point(0,0), identifier));
 					}
 				},
 				removePlayer : function(identifier){
