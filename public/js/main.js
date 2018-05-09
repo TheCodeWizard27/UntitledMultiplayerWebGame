@@ -5,11 +5,11 @@ import ControllerListener from "./ControllerListener.js";
 
 window.addEventListener("load", () => {
 	/*let windowResize = function(e){
-		let faktor = window.innerWidth / SC.GAME.GRID_WIDTH;
+		let faktor = window.innerWidth / GAME_CONF.GRID_WIDTH;
 		let canvas = document.getElementById("window");
 		
 		canvas.style.width = window.innerWidth.toString()+"px";
-		canvas.style.height = (SC.GAME.GRID_HEIGHT*faktor).toString()+"px";
+		canvas.style.height = (GAME_CONF.GRID_HEIGHT*faktor).toString()+"px";
 	};
 	windowResize();
 	window.onresize = windowResize;*/
