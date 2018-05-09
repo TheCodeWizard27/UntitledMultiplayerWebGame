@@ -6,10 +6,10 @@ Mit diesem Kontroller kann man einfacher auf die Daten, der angeschlossenen Kont
 Dies startet den Interval, inwelchem die Daten verarbeitet werden.
 ###stop
 Dieser setzt den Interval zurück
-###_loop
-Hauptverarbeitungsschlaufe
-###_scanGamePads
-Hier werden alle Kontroller durchlaufen. Neue werden der internen Liste hinzugefügt, und getrennte werden aus der Liste entfernt.
+###_scanAddGamePads
+Iteriert die lokale Liste mit der vom Browser. Neue Einträge werden in der Lokalen ergänzt.
+###_scanRemoveGamePads
+Iteriert die lokale Liste mit der vom Browser. Alte Einträge werden in der Lokalen entfernt.
 ###setButtonCallback
 Die setzt die Events fest, welche aufgerufen wird, wenn etwas bei den Knöpfeh passiert.
 ###setDPadCallback
@@ -22,3 +22,5 @@ Setzt die Genauigkeit eines analogen Kontroller Knüppels, ab welcher Verschiebd
 Setzt die Zeitspanne in Milisekunden zwischen den Trigger Eventen
 ###reload
 Setzt das gesetzte Delay zwischen den Perionen in kraft
+
+
