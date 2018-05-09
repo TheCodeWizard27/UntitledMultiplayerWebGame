@@ -19,6 +19,7 @@ let GameController = {
 					this._graphics = Graphics.getInstance(this._stage);
 					this._graphics.init();
 					this._gameObj = GameObj.getInstance();
+					this._controllerListener;
 				},
 				
 				start : function(){
