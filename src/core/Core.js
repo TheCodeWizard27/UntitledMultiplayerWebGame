@@ -1,5 +1,7 @@
 "use strict";
 
+const Client = require("../../src/client/Client.js");
+
 let Core = {
 	core: null,
 	
@@ -8,11 +10,16 @@ let Core = {
 			this.core = {
 				
 				init() {
-					
+				
 				},
 				
 				start() {
-					console.log("start");
+					if(isClient){
+						let client = Client.getInstance();
+						
+					}else {
+					
+					}
 				}
 			};
 		}
