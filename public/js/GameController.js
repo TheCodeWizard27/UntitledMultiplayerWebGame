@@ -6,9 +6,9 @@ import {uuid} from "./functions.js";
 
 let GameController = {
 	_gameController: null,
-	
 	getInstance() {
 		if(this._gameController == null) {
+			
 			this._gameController = {
 				_stage: new createjs.StageGL("window"),
 				_graphics: null,
@@ -16,6 +16,7 @@ let GameController = {
 				_controllerListener: null,
 				
 				init() {
+					
 					this._graphics = Graphics.getInstance(this._stage);
 					this._graphics.init();
 					this._gameObj = GameObj.getInstance();
@@ -44,9 +45,9 @@ let GameController = {
 					
 				},
 				
-				update() {
+				update(event) {
 					this._gameObj.update();
-					this._stage.update();
+					this._stage.update(event);
 				},
 				
 				/**
@@ -54,6 +55,7 @@ let GameController = {
 				 * @param pad    the controller with identifier
 				 */
 				controllerConnect(pad) {
+					
 					this._gameObj.addPlayer(pad.index); // TODO Lukas
 				},
 				/**
@@ -61,6 +63,7 @@ let GameController = {
 				 * @param pad    the disconnected controller
 				 */
 				controllerDisconnect(pad) {
+					
 					this._gameObj.removePlayer(pad.index);
 				},
 				
@@ -70,6 +73,7 @@ let GameController = {
 				 * @param btn    the button pressed
 				 */
 				controllerBtnDown(id, btn) {
+					
 					this._gameObj.addPlayerKey(id.index, btn);
 				},
 				/**
@@ -78,6 +82,7 @@ let GameController = {
 				 * @param btn    the button released
 				 */
 				controllerBtnUp(id, btn) {
+					
 					this._gameObj.removePlayerKey(id.index, btn);
 				},
 				
@@ -87,6 +92,7 @@ let GameController = {
 				 * @param axis    which direction was pressed
 				 */
 				controllerDPadDown(id, axis) {
+					
 					this._gameObj.addPlayerKey(id.index, this._getDirectionfromString(axis.toString()));
 				},
 				/**
