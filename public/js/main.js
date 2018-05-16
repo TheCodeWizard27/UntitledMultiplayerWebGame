@@ -6,17 +6,17 @@ import ControllerListener from "./ControllerListener.js";
 window.addEventListener("load", () => {
 	console.log("INIT");
 	/*let windowResize = function(e){
-		let faktor = window.innerWidth / SC.GAME.GRID_WIDTH;
+		let faktor = window.innerWidth / GAME_CONF.GRID_WIDTH;
 		let canvas = document.getElementById("window");
 		
 		canvas.style.width = window.innerWidth.toString()+"px";
-		canvas.style.height = (SC.GAME.GRID_HEIGHT*faktor).toString()+"px";
+		canvas.style.height = (GAME_CONF.GRID_HEIGHT*faktor).toString()+"px";
 	};
 	windowResize();
 	window.onresize = windowResize;*/
 	
-// GameController.getInstance().init();
-
+	GameController.getInstance().init();
+/*
 	let cl = new ControllerListener();
 	cl.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, pad => console.log("CONNECT %o", pad));
 	cl.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, pad => console.log("DISCONNECT %o", pad));
@@ -30,5 +30,5 @@ window.addEventListener("load", () => {
 	// cl.setDPadCallback(CONTROLLER.PRESSED, (id, axis) => console.log("AXIS PRESSED %s %o", id, axis));
 
 	cl.start();
-
+*/
 });

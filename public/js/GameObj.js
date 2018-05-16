@@ -30,6 +30,7 @@ let GameObj = {
 					if(this._playerList.has(identifier)){
 						this._playerList.get(identifier).delete();
 						this._playerList.delete(identifier);
+						console.log(this._playerList);
 					}
 				},
 				addPlayerKey : function(identifier,key){

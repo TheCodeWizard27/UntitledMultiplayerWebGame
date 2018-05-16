@@ -22,15 +22,21 @@ export default class Player{
 		this._id = id;
 		this._sprite = Graphics.getInstance().createPlayer();
 		
-		socket.emit("I_AM_NEW", this);
+		//socket.emit("I_AM_NEW", this);
 	}
 	
 	update() {
+		this._walking = false;
 		this.handleInput();
 		
-		socket.emit("RECEIVE_DATA", this);
+		//socket.emit("RECEIVE_DATA", this);
 		
 		if(this._markCooldown > 0){ this._markCooldown--; }
+		
+		this._sprite.x = this._pos.x;
+		this._sprite.y = this._pos.y;
+		
+		this.handleAnimations();
 		
 		this._markers.forEach(function(value) {
 			value.update();
@@ -39,11 +45,35 @@ export default class Player{
 	
 	handleInput(){
 		for(let value of this._keyBuffer){
-			switch(value.nr){
-			case 1:
-				this.mark();
-				break;
+			if(value instanceof createjs.Point){
+				this._dir = value;
+				this._pos.x += this._dir.x*GAME_CONF.SPEED;
+				this._pos.y += this._dir.y*GAME_CONF.SPEED;
+				this._walking = true;
+			}else {
+				switch(value.nr){
+				case 1:
+					this.mark();
+					break;
+				}
 			}
+		}
+	}
+	
+	handleAnimations(){
+		let animationString;
+		
+		switch(this._dir) {
+		case DIRECTION.UP:		animationString = "Up";		break;
+		case DIRECTION.DOWN:	animationString = "Down";	break;
+		case DIRECTION.RIGHT:	animationString = "Right";	break;
+		case DIRECTION.LEFT:	animationString = "Left";	break;
+		}
+		
+		if(!this._walking && this._sprite.currentAnimation !== "f" + animationString){
+			this._sprite.gotoAndPlay("f" + animationString);
+		}else if(this._sprite.currentAnimation !== "w" + animationString){
+			this._sprite.gotoAndPlay("w" + animationString);
 		}
 	}
 	

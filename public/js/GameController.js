@@ -5,98 +5,112 @@ import ControllerListener from "./ControllerListener.js";
 import {uuid} from "./functions.js";
 
 let GameController = {
-	_gameController : null,
+	_gameController: null,
 	
-	getInstance : function(){
-		if(this._gameController == null){
+	getInstance() {
+		if(this._gameController == null) {
 			this._gameController = {
-				_stage : new createjs.Stage("window"),
-				_graphics : null,
-				_gameObj : null,
-				_controllerListener : null,
+				_stage: new createjs.StageGL("window"),
+				_graphics: null,
+				_gameObj: null,
+				_controllerListener: null,
 				
-				init : function(){
+				init() {
 					this._graphics = Graphics.getInstance(this._stage);
 					this._graphics.init();
 					this._gameObj = GameObj.getInstance();
+				},
+				
+				start() {
+					createjs.Ticker.addEventListener("tick", this.update.bind(this));
 					
 					this._controllerListener = new ControllerListener();
-					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, this.controllerConnect.bind(this));
-					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, this.controllerDisconnect.bind(this));
 					this._controllerListener.setButtonCallback(CONTROLLER.DOWN, this.controllerBtnDown.bind(this));
 					this._controllerListener.setButtonCallback(CONTROLLER.UP, this.controllerBtnUp.bind(this));
 					this._controllerListener.setDPadCallback(CONTROLLER.DOWN, this.controllerDPadDown.bind(this));
 					this._controllerListener.setDPadCallback(CONTROLLER.UP, this.controllerDPadUp.bind(this));
-				},
-				
-				start : function(){
-					createjs.Ticker.addEventListener("tick", this.update.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.CONNECT, this.controllerConnect.bind(this));
+					this._controllerListener.setGlobalEvents(CONTROLLER.GLOBAL.DISCONNECT, this.controllerDisconnect.bind(this));
+					
 					this._controllerListener.start();
 					
-					socket.on("NEW_PLAYER", (player)=>{
-						this._gameObj.addPlayer(player);
-					});
-					
-					socket.on("SEND_DATA", (player)=>{
-						this._gameObj._playerList.set(player._id, player);
-					});
+					//					socket.on("NEW_PLAYER", (player)=>{
+					//						this._gameObj.addPlayer(player);
+					//					});
+					//
+					//					socket.on("SEND_DATA", (player)=>{
+					//						this._gameObj._playerList.set(player._id, player);
+					//					});
 					
 				},
 				
-				update : function(){
+				update() {
 					this._gameObj.update();
 					this._stage.update();
 				},
 				
 				/**
 				 * adds newly connected controller with player to game
-				 * @param pad	the controller with identifier
+				 * @param pad    the controller with identifier
 				 */
-				controllerConnect : function(pad){
-					this._gameObj.addPlayer(uuid()); // TODO Lukas
+				controllerConnect(pad) {
+					this._gameObj.addPlayer(pad.index); // TODO Lukas
 				},
 				/**
 				 * remove disconnected controller with player
-				 * @param pad	the disconnected controller
+				 * @param pad    the disconnected controller
 				 */
-				controllerDisconnect : function(pad){
+				controllerDisconnect(pad) {
 					this._gameObj.removePlayer(pad.index);
 				},
 				
 				/**
 				 * adds pressed button to players keybuffer
-				 * @param id	identifier for player
-				 * @param btn	the button pressed
+				 * @param id    identifier for player
+				 * @param btn    the button pressed
 				 */
-				controllerBtnDown : function(id, btn){
+				controllerBtnDown(id, btn) {
 					this._gameObj.addPlayerKey(id.index, btn);
 				},
 				/**
 				 * removes pressed button to players keybuffer
-				 * @param id	identifier for player
-				 * @param btn	the button released
+				 * @param id    identifier for player
+				 * @param btn    the button released
 				 */
-				controllerBtnUp : function(id, btn){
+				controllerBtnUp(id, btn) {
 					this._gameObj.removePlayerKey(id.index, btn);
 				},
 				
 				/**
 				 * adds direction to Player with keybuffer
-				 * @param id	identifier for player
-				 * @param axis	which direction was pressed
+				 * @param id    identifier for player
+				 * @param axis    which direction was pressed
 				 */
-				controllerDPadDown : function(id, axis){
-					this._gameObj.addPlayerKey(id.index, createjs.Point(axis.x, axis.y));
+				controllerDPadDown(id, axis) {
+					this._gameObj.addPlayerKey(id.index, this._getDirectionfromString(axis.toString()));
 				},
 				/**
 				 * removes direction to Player with keybuffer
-				 * @param id	identifier for player
-				 * @param axis	which direction was released
+				 * @param id    identifier for player
+				 * @param axis    which direction was released
 				 */
-				controllerDPadUp : function(id, axis){
-					this._gameObj.removePlayerKey(id.index, createjs.Point(axis.x, axis.y));
+				controllerDPadUp(id, axis) {
+					this._gameObj.removePlayerKey(id.index, this._getDirectionfromString(axis.toString()));
+				},
+				
+				_getDirectionfromString(string) {
+					switch(string) {
+					case DIRECTION.UP.toString():
+						return DIRECTION.UP;
+					case DIRECTION.DOWN.toString():
+						return DIRECTION.DOWN;
+					case DIRECTION.RIGHT.toString():
+						return DIRECTION.RIGHT;
+					case DIRECTION.LEFT.toString():
+						return DIRECTION.LEFT;
+					}
 				}
- 			}
+			};
 		}
 		return this._gameController;
 	}
