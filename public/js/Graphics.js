@@ -24,9 +24,7 @@ let Graphics = {
 				init: function() {
 					let manifest = [
 						{src: "link.png", id: "Link"},
-						{src: "bullet.png", id: "Bullet"},
-						{src: "trump_idle.png", id: "TrumpIdle"},
-						{src: "trump_run.png", id: "TrumpRun"}
+						{src: "bullet.png", id: "Bullet"}
 					];
 					this._loader.addEventListener("complete", this.completedLoading.bind(this));
 					this._loader.loadManifest(manifest, false, "./assets/textures/");
@@ -45,23 +43,14 @@ let Graphics = {
 						"images": [this._loader.getResult("TrumpIdle"), this._loader.getResult("TrumpRun")],
 						"frames": {"width": 256, "height": 256},
 						"animations": {
-							"fDown": [0, 9, "fDown", 0.3],	//TODO Benny Idle animations
-							"fRight": [10, 19, "fRight", 1],
-							"fUp": [20, 29, "fUp", 1],
-							"fLeft": [30, 39, "fLeft", 1],
-							"wDown": [40, 45, "wDown", 1],	//TODO Benny Idle animations
-							"wRight": [46, 51, "wRight", 1],
-							"wUp": [52, 57, "wUp", 1],
-							"wLeft": [58, 63, "wLeft", 1]
-							
-							//							"fDown" : [0,1,"fDown",0.1],
-							//							"fLeft" : [4,5,"fLeft",0.1],
-							//							"fRight" : [8,9,"fRight",0.1],
-							//							"fUp" : [12,13,"fUp",0.1],
-							//							"wDown" : {frames : [1,2,3,0], next: "wDown", speed: 1},
-							//							"wLeft" : {frames : [5,6,7,4], next: "wLeft", speed: 1},
-							//							"wRight" : {frames : [9,10,11,8], next: "wRight", speed: 1},
-							//							"wUp" : {frames : [13,14,15,12], next: "wUp", speed: 1}
+							"fDown" : [0,1,"fDown",0.1],
+							"fLeft" : [4,5,"fLeft",0.1],
+							"fRight" : [8,9,"fRight",0.1],
+							"fUp" : [12,13,"fUp",0.1],
+							"wDown" : {frames : [1,2,3,0], next: "wDown", speed: 1},
+							"wLeft" : {frames : [5,6,7,4], next: "wLeft", speed: 1},
+							"wRight" : {frames : [9,10,11,8], next: "wRight", speed: 1},
+							"wUp" : {frames : [13,14,15,12], next: "wUp", speed: 1}
 							
 						}
 					});
