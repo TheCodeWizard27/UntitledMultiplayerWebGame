@@ -1,13 +1,19 @@
 "use strict";
 
+const Graphics = require("../../src/client/Graphics.js");
+
 let Client = {
-	client : null,
+	client: null,
 	
 	getInstance() {
-		if(this.client = null){
+		if(this.client == null) {
 			this.client = {
-			
-			}
+				_graphics: Graphics.getInstance(),
+				
+				init() {
+					this._graphics.init();
+				}
+			};
 		}
 		console.log("client init");
 		return this.client;
@@ -16,4 +22,4 @@ let Client = {
 
 module.exports = Client;
 
-Client.getInstance();
+window.addEventListener("load", () => { Client.getInstance().init(); });
