@@ -1,3 +1,5 @@
+"use strict";
+
 let Graphics = {
 	graphics : null,
 	

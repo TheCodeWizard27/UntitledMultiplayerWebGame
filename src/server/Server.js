@@ -1,10 +1,11 @@
+"use strict";
+
 let Server = {
-	server : null,
+	server: null,
 	
 	getInstance(io) {
 		if(this.server = null) {
-			this.server = {
-			}
+			this.server = {};
 		}
 		console.log("Server init");
 		return this.server;
