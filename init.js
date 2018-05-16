@@ -1,44 +1,24 @@
-"use strict";
-const express = require("express");
-const app = express();
-const path = require("path");
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+let app = require('express')();
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
+let Server = require('./src/server/Server.js');
 
-const port = 3000;
-const hostname = "localhost";
-
-const SC = require("./src/Const.js").SERVER;
-
-const Connection = require("./src/Connection.js");
-const Player = require("./src/Player.js");
-const LobbyManager = require("./src/LobbyManager.js");
-
-app.use(express.static(path.join(__dirname, "public")));
-
-const lobbyManager = new LobbyManager();
-
-io.on(SC.NEW_CONNECTION, socket => {
-	let connection = new Connection(socket);
-	let player = new Player(connection);
-	lobbyManager.addPlayerToALobby(player);
-	
-	connection.on(SC.DISCONNECT, () => {
-		console.log("DISCONNECT %s", socket.id);
-		player.disconnect();
-	});
-	
-	connection.on("I_AM_NEW", (me)=>{
-		socket.broadcast.emit("NEW_PLAYER", me);
-	});
-	
-	connection.on("RECEIVE_DATA", (me)=>{
-		socket.broadcast.emit("SEND_DATA", me);
-	});
-	
-	console.log("Added Player with ID \"%s\" to Lobby %i", socket.id, player.getLobby().getId());
+//By default, we forward the / path to index.html automatically.
+app.get( '/', function( req, res ){
+	res.sendFile( 'index.html' , { root:__dirname + '/public' });
 });
 
-server.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}/`);
+//This handler will listen for requests on /*, any file from the root of our server.
+//See expressjs documentation for more info on routing.
+app.get( '/*' , function( req, res, next ) {
+
+	let file = req.params[0];
+
+	res.sendFile( __dirname + '/' + file );
 });
+
+http.listen(3000, function(){
+	console.log('listening on *:3000');
+});
+
+Server.getInstance(io);
