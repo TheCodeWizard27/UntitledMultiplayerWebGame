@@ -3,12 +3,12 @@
 let Core = {
 	core: null,
 	
-	getInstance() {
+	getInstance(isClient) {
 		if(this.core == null) {
 			this.core = {
 				
 				init() {
-				
+					
 				},
 				
 				start() {

@@ -50,7 +50,7 @@ let Graphics = {
 						"frames": {"width": 32, "height": 32}
 					});
 					
-					Core.getInstance().start();
+					Core.getInstance().start(true);
 				},
 				
 				addPlayer(id, pos) {
@@ -69,7 +69,6 @@ let Graphics = {
 				}
 			};
 		}
-		console.log("graphics init");
 		return this.graphics;
 	}
 };
