@@ -7,7 +7,7 @@ import {uuid} from "./functions.js";
 let GameController = {
 	_gameController : null,
 	
-	getInstance : function(){
+	getInstance(){
 		if(this._gameController == null){
 			this._gameController = {
 				_stage : new createjs.Stage("window"),
@@ -15,14 +15,13 @@ let GameController = {
 				_gameObj : null,
 				_controllerListener : null,
 				
-				init : function(){
+				init(){
 					this._graphics = Graphics.getInstance(this._stage);
 					this._graphics.init();
 					this._gameObj = GameObj.getInstance();
-					this._controllerListener;
 				},
 				
-				start : function(){
+				start(){
 					createjs.Ticker.addEventListener("tick", this.update.bind(this));
 					
 					this._controllerListener = new ControllerListener();
@@ -45,23 +44,23 @@ let GameController = {
 					
 				},
 				
-				update : function(){
+				update(event){
 					this._gameObj.update();
-					this._stage.update();
+					this._stage.update(event);
 				},
 				
 				/**
 				 * adds newly connected controller with player to game
 				 * @param pad	the controller with identifier
 				 */
-				controllerConnect : function(pad){
+				controllerConnect(pad){
 					this._gameObj.addPlayer(pad.index); // TODO Lukas
 				},
 				/**
 				 * remove disconnected controller with player
 				 * @param pad	the disconnected controller
 				 */
-				controllerDisconnect : function(pad){
+				controllerDisconnect(pad){
 					this._gameObj.removePlayer(pad.index);
 				},
 				
@@ -70,7 +69,7 @@ let GameController = {
 				 * @param id	identifier for player
 				 * @param btn	the button pressed
 				 */
-				controllerBtnDown : function(id, btn){
+				controllerBtnDown(id, btn){
 					this._gameObj.addPlayerKey(id.index, btn);
 				},
 				/**
@@ -78,7 +77,7 @@ let GameController = {
 				 * @param id	identifier for player
 				 * @param btn	the button released
 				 */
-				controllerBtnUp : function(id, btn){
+				controllerBtnUp(id, btn){
 					this._gameObj.removePlayerKey(id.index, btn);
 				},
 				
@@ -87,7 +86,7 @@ let GameController = {
 				 * @param id	identifier for player
 				 * @param axis	which direction was pressed
 				 */
-				controllerDPadDown : function(id, axis){
+				controllerDPadDown(id, axis){
 					this._gameObj.addPlayerKey(id.index, this._getDirectionfromString(axis.toString()));
 				},
 				/**
@@ -95,11 +94,11 @@ let GameController = {
 				 * @param id	identifier for player
 				 * @param axis	which direction was released
 				 */
-				controllerDPadUp : function(id, axis){
+				controllerDPadUp(id, axis){
 					this._gameObj.removePlayerKey(id.index, this._getDirectionfromString(axis.toString()));
 				},
 				
-				_getDirectionfromString : function(string){
+				_getDirectionfromString(string){
 					switch(string){
 					case DIRECTION.UP.toString():	return DIRECTION.UP;
 					case DIRECTION.DOWN.toString():	return DIRECTION.DOWN;
