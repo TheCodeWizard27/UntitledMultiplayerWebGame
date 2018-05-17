@@ -72,10 +72,25 @@ let Graphics = {
 					}
 				},
 				
-				addMarker(marker) {
+				addMarker(marker, dir) {
 					let tempSprite = new createjs.Sprite(this._markerSheet);
 					tempSprite.x = marker._pos.x;
 					tempSprite.y = marker._pos.y;
+					
+					switch(dir) {
+					case CONST.DIRECTION.UP:
+						tempSprite.rotation = 270;
+						break;
+					case CONST.DIRECTION.DOWN:
+						tempSprite.rotation = 90;
+						break;
+					case CONST.DIRECTION.RIGHT:
+						tempSprite.rotation = 0;
+						break;
+					case CONST.DIRECTION.LEFT:
+						tempSprite.rotation = 180;
+						break;
+					}
 					
 					this._stage.addChild(tempSprite);
 					this._markerMap.set(marker, tempSprite);
@@ -91,14 +106,14 @@ let Graphics = {
 					this._stage.update(event);
 				},
 				_handleAnimations(gameObj) {
-					gameObj._playerMap.forEach(function(value, key, map) {
+					gameObj._playerMap.forEach(function(player, key, map) {
 						let animationString;
-						let tempSprite = this._playerMap.get(value._id);
+						let tempSprite = this._playerMap.get(player._id);
 						
-						tempSprite.x = value._pos.x;
-						tempSprite.y = value._pos.y;
+						tempSprite.x = player._pos.x;
+						tempSprite.y = player._pos.y;
 						
-						switch(value._dir) {
+						switch(player._dir) {
 						case CONST.DIRECTION.UP:
 							animationString = "Up";
 							break;
@@ -113,11 +128,17 @@ let Graphics = {
 							break;
 						}
 						
-						if(!value._walking && tempSprite.currentAnimation !== "f" + animationString) {
+						if(!player._walking && tempSprite.currentAnimation !== "f" + animationString) {
 							tempSprite.gotoAndPlay("f" + animationString);
-						} else if(value._walking && tempSprite.currentAnimation !== "w" + animationString) {
+						} else if(player._walking && tempSprite.currentAnimation !== "w" + animationString) {
 							tempSprite.gotoAndPlay("w" + animationString);
 						}
+						
+						player._markers.forEach(function(marker) {
+							let tempMarker = this._markerMap.get(marker);
+							tempMarker.x = marker._pos.x;
+							tempMarker.y = marker._pos.y;
+						}.bind(this));
 					}.bind(this));
 				}
 			};

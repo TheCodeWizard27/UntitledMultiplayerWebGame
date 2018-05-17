@@ -32,11 +32,8 @@ module.exports = class Player {
 		if(this._markCooldown > 0) {
 			this._markCooldown--;
 		}
-		
-		//this.handleAnimations(); //Hanlde Animations In Graphics
-		
-		this._markers.forEach(function(value) {
-			value.update();
+		this._markers.forEach(function(marker) {
+			marker.update();
 		});
 	}
 	
@@ -55,33 +52,6 @@ module.exports = class Player {
 				}
 			}
 		}
-	}
-	
-	handleAnimations() {
-		/*let animationString;
-		
-		switch(this._dir) {
-		case DIRECTION.UP:
-			animationString = "Up";
-			break;
-		case DIRECTION.DOWN:
-			animationString = "Down";
-			break;
-		case DIRECTION.RIGHT:
-			animationString = "Right";
-			break;
-		case DIRECTION.LEFT:
-			animationString = "Left";
-			break;
-		}
-		
-		if(!this._walking && this._sprite.currentAnimation !== "f" + animationString) {
-			this._sprite.gotoAndPlay("f" + animationString);
-			
-		} else if(this._walking && this._sprite.currentAnimation !== "w" + animationString) {
-			this._sprite.gotoAndPlay("w" + animationString);
-		}*/
-		//TODO Benny copy and adapt to Graphics class
 	}
 	
 	/**
