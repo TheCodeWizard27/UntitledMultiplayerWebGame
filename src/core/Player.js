@@ -15,7 +15,8 @@ module.exports = class Player {
 		this._markCooldown = 0;
 		this._walking = false;
 		this._size = {width: 128, height: 128};
-		this._keyBuffer = new Set();
+		this._keyBuffer = new Map();
+		this._currentKeys = new Set();
 		this._score = 0;
 		this._id = id;
 		
@@ -38,7 +39,7 @@ module.exports = class Player {
 	}
 	
 	handleInput() {
-		for(let value of this._keyBuffer) {
+		for(let value of this._currentKeys) {
 			if([CONST.DIRECTION.UP, CONST.DIRECTION.DOWN, CONST.DIRECTION.RIGHT, CONST.DIRECTION.LEFT].includes(value)) {
 				this._dir = value;
 				this._pos.x += this._dir.x * CONST.GAME_CONF.SPEED;
@@ -69,7 +70,7 @@ module.exports = class Player {
 	 * @param key    keycode
 	 */
 	addKey(key) {
-		this._keyBuffer.add(key);
+		this._currentKeys.add(key);
 	}
 	
 	/**
@@ -77,7 +78,7 @@ module.exports = class Player {
 	 * @param key    keycode
 	 */
 	removeKey(key) {
-		this._keyBuffer.delete(key);
+		this._currentKeys.delete(key);
 	}
 	
 	/**
