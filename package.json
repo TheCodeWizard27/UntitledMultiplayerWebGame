@@ -5,7 +5,7 @@
 	"main": "init.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "browserify src/client/Client.js -o public/bundle.js && node ./init.js"
+		"start": "browserify src/client/main.js -o public/bundle.js && node ./init.js"
 	},
 	"repository": {
 		"type": "git",

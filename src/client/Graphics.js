@@ -1,5 +1,5 @@
 "use strict";
-const Core = require("../../src/core/Core.js");
+const Client = require("../../src/client/Client.js");
 
 let Graphics = {
 	graphics: null,
@@ -51,7 +51,9 @@ let Graphics = {
 						"frames": {"width": 32, "height": 32}
 					});
 					
-					Core.getInstance().start(true);
+					let tempClient = Client.getInstance();
+					createjs.Ticker().addEventListener("tick", tempClient.update().bind(tempClient));
+					tempClient.start();
 				},
 				
 				addPlayer(id, pos) {
@@ -82,6 +84,9 @@ let Graphics = {
 						this._stage.removeChild(this._markerMap.get(marker));
 						this._markerMap.delete(marker);
 					}
+				},
+				updateView(event){
+					this._stage.update(event);
 				}
 			};
 		}

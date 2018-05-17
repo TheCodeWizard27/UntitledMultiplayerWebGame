@@ -1,10 +1,10 @@
-module.exports = class Point{
+module.exports = class Vector{
 	constructor(x,y){
 		this.x = x;
 		this.y = y;
 	}
 	
 	clone(){
-		return new Point(this.x,this.y);
+		return new Vector(this.x,this.y);
 	}
 };

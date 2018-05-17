@@ -1,5 +1,5 @@
 "use strict";
-const Point = require("../../src/core/Point.js");
+const Vector = require("./Vector.js");
 
 // Server Configuration
 const SERVER = {
@@ -37,11 +37,11 @@ const CONTROLLER = {
 };
 
 const DIRECTION = {
-	UP: new Point(0, -1),
-	DOWN: new Point(0, 1),
-	LEFT: new Point(-1, 0),
-	RIGHT: new Point(1, 0),
-	WAITING: new Point(0, 0)
+	UP: new Vector(0, -1),
+	DOWN: new Vector(0, 1),
+	LEFT: new Vector(-1, 0),
+	RIGHT: new Vector(1, 0),
+	WAITING: new Vector(0, 0)
 };
 
 module.exports = {SERVER: SERVER, GAME_CONF: GAME_CONF, CONTROLLER: CONTROLLER, DIRECTION : DIRECTION};

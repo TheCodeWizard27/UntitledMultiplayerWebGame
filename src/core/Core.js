@@ -5,7 +5,7 @@ const Client = require("../../src/client/Client.js");
 let Core = {
 	core: null,
 	
-	getInstance(isClient) {
+	getInstance() {
 		if(this.core == null) {
 			this.core = {
 				
@@ -14,15 +14,17 @@ let Core = {
 				},
 				
 				start() {
-					if(isClient) {
-						
-					} else {
-					
-					}
+					//TODO Benny IDK
+				},
+				
+				update(){
+					//TODO Benny Game Logic Update
+				},
+				serverUpdate(){
+					//TODO Benny Server Update + foreach(lobby) this.update
 				}
 			};
 		}
-		console.log("init core");
 		return this.core;
 	}
 };
