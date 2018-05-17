@@ -1,5 +1,4 @@
 "use strict";
-
 const Client = require("../../src/client/Client.js");
 
 let Core = {
@@ -17,13 +16,12 @@ let Core = {
 					//TODO Benny IDK
 				},
 				
-				update() {
-					console.log("hey");
-					//TODO Benny Game Logic Update
-				},
-				serverUpdate() {
-					this.update();
-					//TODO Benny Server Update + foreach(lobby) this.update
+				update(gameObj) {
+					if(gameObj !== undefined) {
+						gameObj._playerList.forEach(function(value, key, map) {
+							value.update();
+						});
+					}
 				}
 			};
 		}

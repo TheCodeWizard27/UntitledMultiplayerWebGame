@@ -14,6 +14,12 @@ const SERVER = {
 		INPUT_RESPONSE: "Input response"
 	}
 };
+
+const GET = {
+	SOCKETS: 0,
+	GAME: 0
+};
+
 const GAME_CONF = {
 	FPS: 30,
 	MAX_PLAYER: 4,
@@ -44,4 +50,4 @@ const DIRECTION = {
 	WAITING: new Vector(0, 0)
 };
 
-module.exports = {SERVER: SERVER, GAME_CONF: GAME_CONF, CONTROLLER: CONTROLLER, DIRECTION : DIRECTION};
+module.exports = {GET: GET, SERVER: SERVER, GAME_CONF: GAME_CONF, CONTROLLER: CONTROLLER, DIRECTION : DIRECTION};

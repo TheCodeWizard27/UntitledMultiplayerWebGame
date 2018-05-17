@@ -57,7 +57,7 @@ let Graphics = {
 				},
 				
 				addPlayer(id, pos) {
-					let tempSprite = createjs.Sprite(this._playerSheet);
+					let tempSprite = new createjs.Sprite(this._playerSheet);
 					tempSprite.x = pos.x;
 					tempSprite.y = pos.y;
 					
@@ -72,7 +72,7 @@ let Graphics = {
 				},
 				
 				addMarker(marker) {
-					let tempSprite = createjs.Sprite(this._markerSheet);
+					let tempSprite = new createjs.Sprite(this._markerSheet);
 					tempSprite.x = marker._pos.x;
 					tempSprite.y = marker._pos.y;
 					

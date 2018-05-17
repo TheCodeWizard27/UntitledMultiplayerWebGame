@@ -8,7 +8,7 @@ const Marker = require("../../src/core/Marker.js");
  * Each player has its own keyBuffer
  */
 module.exports = class Player {
-	constructor(pos, id) {
+	constructor(id, pos) {
 		this._pos = pos;
 		this._dir = CONST.DIRECTION.DOWN;
 		this._markers = [];
@@ -20,7 +20,6 @@ module.exports = class Player {
 		this._id = id;
 		
 		Graphics.getInstance().addPlayer(this._id, this._pos);
-		
 		//socket.emit("I_AM_NEW", this); TODO Benny Networking
 	}
 	
@@ -43,8 +42,7 @@ module.exports = class Player {
 	
 	handleInput() {
 		for(let value of this._keyBuffer) {
-			if([CONST.DIRECTION.UP,CONST.DIRECTION.DOWN,CONST.DIRECTION.RIGHT,CONST.DIRECTION.LEFT].includes(value)) {
-				//TODO Benny see if it works
+			if([CONST.DIRECTION.UP, CONST.DIRECTION.DOWN, CONST.DIRECTION.RIGHT, CONST.DIRECTION.LEFT].includes(value)) {
 				this._dir = value;
 				this._pos.x += this._dir.x * CONST.GAME_CONF.SPEED;
 				this._pos.y += this._dir.y * CONST.GAME_CONF.SPEED;
@@ -115,7 +113,7 @@ module.exports = class Player {
 	/**
 	 * Deletes Player Sprite for deleting playerobj
 	 */
-	delete() {
+	destroy() {
 		this._markers.forEach(x => x.destroy());
 		Graphics.getInstance().removePlayer(this._id);
 	}
