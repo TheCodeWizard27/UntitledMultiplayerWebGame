@@ -37,7 +37,7 @@ module.exports = {
 				update(event) {
 					this._core.update(this._gameObj);
 					
-					this._graphics.updateView(event);
+					this._graphics.update(event, this._gameObj);
 				},
 				
 				onControllerConnect(pad) {
@@ -65,7 +65,6 @@ module.exports = {
 					}
 				},
 				onDPadUp(name, object) {
-					console.log("up");
 					let tempPlayer = this._gameObj.getPlayer(name.index);
 					if(tempPlayer !== undefined) {
 						tempPlayer.removeKey(this._getDirectionfromString(object.toString()));

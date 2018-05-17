@@ -1,4 +1,5 @@
 "use strict";
+const CONST = require("../../src/core/Const.js");
 
 let Graphics = {
 	graphics: null,
@@ -85,8 +86,39 @@ let Graphics = {
 						this._markerMap.delete(marker);
 					}
 				},
-				updateView(event) {
+				update(event, gameObj) {
+					this._handleAnimations(gameObj);
 					this._stage.update(event);
+				},
+				_handleAnimations(gameObj) {
+					gameObj._playerMap.forEach(function(value, key, map) {
+						let animationString;
+						let tempSprite = this._playerMap.get(value._id);
+						
+						tempSprite.x = value._pos.x;
+						tempSprite.y = value._pos.y;
+						
+						switch(value._dir) {
+						case CONST.DIRECTION.UP:
+							animationString = "Up";
+							break;
+						case CONST.DIRECTION.DOWN:
+							animationString = "Down";
+							break;
+						case CONST.DIRECTION.RIGHT:
+							animationString = "Right";
+							break;
+						case CONST.DIRECTION.LEFT:
+							animationString = "Left";
+							break;
+						}
+						
+						if(!value._walking && tempSprite.currentAnimation !== "f" + animationString) {
+							tempSprite.gotoAndPlay("f" + animationString);
+						} else if(value._walking && tempSprite.currentAnimation !== "w" + animationString) {
+							tempSprite.gotoAndPlay("w" + animationString);
+						}
+					}.bind(this));
 				}
 			};
 		}

@@ -145,7 +145,6 @@ module.exports = class ControllerListener {
 			if(!Functions.comparePoints(cord, CONST.DIRECTION.WAITING)) {
 				this._dpadEventDown({id: pad.data.id, index: padI}, cord);
 			}
-			
 			pad._axisLast = cord.clone();
 		}
 	}

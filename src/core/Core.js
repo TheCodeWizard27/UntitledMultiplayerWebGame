@@ -18,7 +18,7 @@ let Core = {
 				
 				update(gameObj) {
 					if(gameObj !== undefined) {
-						gameObj._playerList.forEach(function(value, key, map) {
+						gameObj._playerMap.forEach(function(value, key, map) {
 							value.update();
 						});
 					}

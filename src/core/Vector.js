@@ -4,6 +4,9 @@ module.exports = class Vector{
 		this.y = y;
 	}
 	
+	toString(){
+		return "x:"+this.x.toString()+"/y:"+this.y;
+	}
 	clone(){
 		return new Vector(this.x,this.y);
 	}
