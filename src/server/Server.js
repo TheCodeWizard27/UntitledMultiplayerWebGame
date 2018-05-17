@@ -1,5 +1,6 @@
 "use strict";
 const Core = require("../../src/core/Core.js");
+global.window = global.document = global;
 
 let Server = {
 	server: null,
@@ -7,7 +8,8 @@ let Server = {
 	getInstance(io) {
 		if(this.server == null) {
 			this.server = {
-				init(){
+				io: io,
+				init() {
 					Core.getInstance(false);
 				}
 			};

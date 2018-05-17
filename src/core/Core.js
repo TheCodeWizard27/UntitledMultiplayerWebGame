@@ -1,7 +1,6 @@
 "use strict";
 
 const Client = require("../../src/client/Client.js");
-const ControllerListener = require("../../src/client/ControllerListener.js"); //TODO Benny ControllListener
 
 let Core = {
 	core: null,

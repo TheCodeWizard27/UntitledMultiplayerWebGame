@@ -1,5 +1,4 @@
 "use strict";
-
 const Graphics = require("../../src/client/Graphics.js");
 
 let Client = {
@@ -21,5 +20,3 @@ let Client = {
 };
 
 module.exports = Client;
-
-window.addEventListener("load", () => { Client.getInstance().init(); });

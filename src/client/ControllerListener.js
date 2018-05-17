@@ -7,7 +7,7 @@ const Functions = require("../core/Functions.js");
  * This Listener triggers events, when something happens on a phisical game controller.
  * Start the listening period with the {@link ControllerListener.start()} method
  */
-export default class ControllerListener {
+module.exports = class ControllerListener {
 	
 	constructor() {
 		this._gamepads = new Map();
@@ -211,4 +211,4 @@ export default class ControllerListener {
 		this.stop();
 		this.start();
 	}
-}
+};
