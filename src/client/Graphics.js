@@ -9,6 +9,7 @@ let Graphics = {
 			this.graphics = {
 				_stage: null,
 				_playerMap: new Map(),
+				_markerMap: new Map(),
 				_playerSheet: null,
 				_collectableSheet: null,
 				_markerSheet: null,
@@ -65,6 +66,21 @@ let Graphics = {
 					if(this._playerMap.has(id)) {
 						this._stage.removeChild(this._playerMap.get(id));
 						this._playerMap.delete(id);
+					}
+				},
+				
+				addMarker(marker) {
+					let tempSprite = createjs.Sprite(this._markerSheet);
+					tempSprite.x = marker._pos.x;
+					tempSprite.y = marker._pos.y;
+					
+					this._stage.addChild(tempSprite);
+					this._markerMap.set(marker, tempSprite);
+				},
+				removeMarker(marker) {
+					if(this._markerMap.has(marker)) {
+						this._stage.removeChild(this._markerMap.get(marker));
+						this._markerMap.delete(marker);
 					}
 				}
 			};

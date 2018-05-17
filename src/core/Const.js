@@ -1,4 +1,6 @@
 "use strict";
+const Point = require("../../src/core/Point.js");
+
 // Server Configuration
 const SERVER = {
 	NEW_CONNECTION: "connect",
@@ -35,11 +37,11 @@ const CONTROLLER = {
 };
 
 const DIRECTION = {
-	UP: new createjs.Point(0, -1),
-	DOWN: new createjs.Point(0, 1),
-	LEFT: new createjs.Point(-1, 0),
-	RIGHT: new createjs.Point(1, 0),
-	WAITING: new createjs.Point(0, 0)
+	UP: new Point(0, -1),
+	DOWN: new Point(0, 1),
+	LEFT: new Point(-1, 0),
+	RIGHT: new Point(1, 0),
+	WAITING: new Point(0, 0)
 };
 
 module.exports = {SERVER: SERVER, GAME_CONF: GAME_CONF, CONTROLLER: CONTROLLER, DIRECTION : DIRECTION};

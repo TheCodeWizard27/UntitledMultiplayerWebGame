@@ -15,7 +15,6 @@ let Core = {
 				
 				start() {
 					if(isClient) {
-						let client = Client.getInstance();
 						
 					} else {
 					
