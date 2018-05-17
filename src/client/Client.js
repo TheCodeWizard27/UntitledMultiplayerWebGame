@@ -13,14 +13,14 @@ module.exports = {
 				
 				init() {
 					this._core.init();
-					this._graphics.init();	//inits graphics that after loading calls this.start
+					this._graphics.init(this);	//inits graphics that after loading calls this.start
 				},
 				
-				start(){
+				start() {
 					//TODO Benny add EventListeners and such
 				},
 				
-				udpate(event){
+				update(event) {
 					this._core.update();
 					
 					this._graphics.updateView(event);

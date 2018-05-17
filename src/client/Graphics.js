@@ -1,5 +1,4 @@
 "use strict";
-const Client = require("../../src/client/Client.js");
 
 let Graphics = {
 	graphics: null,
@@ -7,6 +6,7 @@ let Graphics = {
 	getInstance() {
 		if(this.graphics == null) {
 			this.graphics = {
+				_client: null,
 				_stage: null,
 				_playerMap: new Map(),
 				_markerMap: new Map(),
@@ -15,7 +15,8 @@ let Graphics = {
 				_markerSheet: null,
 				_loader: null,
 				
-				init() {
+				init(client) {
+					this._client = client;
 					this._stage = new createjs.Stage("window");
 					this._loader = new createjs.LoadQueue(false);
 					
@@ -51,9 +52,8 @@ let Graphics = {
 						"frames": {"width": 32, "height": 32}
 					});
 					
-					let tempClient = Client.getInstance();
-					createjs.Ticker().addEventListener("tick", tempClient.update().bind(tempClient));
-					tempClient.start();
+					createjs.Ticker.addEventListener("tick", this._client.update.bind(this._client));
+					this._client.start();
 				},
 				
 				addPlayer(id, pos) {
@@ -85,7 +85,7 @@ let Graphics = {
 						this._markerMap.delete(marker);
 					}
 				},
-				updateView(event){
+				updateView(event) {
 					this._stage.update(event);
 				}
 			};

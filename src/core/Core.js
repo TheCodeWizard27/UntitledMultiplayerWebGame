@@ -17,10 +17,10 @@ let Core = {
 					//TODO Benny IDK
 				},
 				
-				update(){
+				update() {
 					//TODO Benny Game Logic Update
 				},
-				serverUpdate(){
+				serverUpdate() {
 					//TODO Benny Server Update + foreach(lobby) this.update
 				}
 			};
