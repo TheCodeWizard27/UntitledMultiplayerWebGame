@@ -18,9 +18,11 @@ let Core = {
 				},
 				
 				update() {
+					console.log("hey");
 					//TODO Benny Game Logic Update
 				},
 				serverUpdate() {
+					this.update();
 					//TODO Benny Server Update + foreach(lobby) this.update
 				}
 			};
