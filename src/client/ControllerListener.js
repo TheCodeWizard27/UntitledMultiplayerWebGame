@@ -3,8 +3,6 @@
 const CONST = require("../../src/core/Const.js");
 const Functions = require("../core/Functions.js");
 
-//import {upperFirst, comparePoints} from "./Functions.js";
-
 /**
  * This Listener triggers events, when something happens on a phisical game controller.
  * Start the listening period with the {@link ControllerListener.start()} method
@@ -12,7 +10,7 @@ const Functions = require("../core/Functions.js");
 export default class ControllerListener {
 	
 	constructor() {
-		this._gamepads = [];
+		this._gamepads = new Map();
 		
 		this._onEventDisconnect = () => {};
 		this._onEventConnect = () => {};
@@ -28,8 +26,27 @@ export default class ControllerListener {
 		
 		this._intervalDelay = 10;
 		
-		window.addEventListener("gamepadconnected", this._scanAddGamePads.bind(this));
-		window.addEventListener("gamepaddisconnected", this._scanRemoveGamePads.bind(this));
+		window.addEventListener("gamepadconnected", this._preOnEventConnect.bind(this));
+		window.addEventListener("gamepaddisconnected", this._preOnEventDisconnect.bind(this));
+	}
+	
+	_preOnEventConnect(pad) {
+		let i = String(pad.gamepad.index);
+		let obj = {};
+		obj.index = i;
+		obj.data = pad.gamepad;
+		obj._btnLast = [];
+		obj._axisLast = CONST.DIRECTION.WAITING.clone();
+		obj._multiKeyPresses = false;
+		this._gamepads.set(i, obj);
+		this._onEventConnect(this._gamepads.get(i));
+	}
+	
+	_preOnEventDisconnect(pad) {
+		let i = String(pad.gamepad.index);
+		let deletedPad = this._gamepads.get(i);
+		this._gamepads.delete(i);
+		this._onEventDisconnect(deletedPad);
 	}
 	
 	/**
@@ -37,7 +54,6 @@ export default class ControllerListener {
 	 */
 	start() {
 		if(this._loopInterval) return;
-		this._scanAddGamePads();
 		this._loopInterval = setInterval(this._loop.bind(this), this._intervalDelay);
 	}
 	
@@ -56,36 +72,41 @@ export default class ControllerListener {
 	
 	_loop() {
 		
-		for(let pad of this._gamepads) {
-			navigator.getGamepads();
+		for(let e of Object.values(navigator.getGamepads())) {
+			if(e) {
+				this._gamepads.get(String(e.index)).data = e;
+			}
+		}
+		
+		for(let [padI, pad] of this._gamepads) {
 			let nowPressedButtons = [];
 			// Buttons
-			for(let nr = 0; nr < pad.buttons.length; nr++) {
-				let btn = pad.buttons[nr];
+			for(let nr = 0; nr < pad.data.buttons.length; nr++) {
+				let btn = pad.data.buttons[nr];
 				btn.nr = nr;
 				
 				if(!btn.pressed) continue;
 				
 				if(!pad._btnLast.includes(nr)) {
 					pad._btnLast.push(nr);
-					this._btnCallbackDown({id: pad.id, index: pad.index}, btn);
+					this._btnCallbackDown({id: pad.data.id, index: padI}, btn);
 				}
 				
-				this._btnCallbackPressed({id: pad.id, index: pad.index}, btn);
+				this._btnCallbackPressed({id: pad.data.id, index: padI}, btn);
 				nowPressedButtons.push(nr);
 			}
 			
 			for(let last of pad._btnLast) {
 				if(!nowPressedButtons.includes(last)) {
-					let btn = pad.buttons[last];
+					let btn = pad.data.buttons[last];
 					btn.nr = last;
-					this._btnCallbackUp({id: pad.id, index: pad.index}, btn);
+					this._btnCallbackUp({id: pad.data.id, index: padI}, btn);
 				}
 			}
 			pad._btnLast = nowPressedButtons;
 			
-			let axis0 = pad.axes[0];
-			let axis1 = pad.axes[1];
+			let axis0 = pad.data.axes[0];
+			let axis1 = pad.data.axes[1];
 			// D-Pad axes
 			let cord = CONST.DIRECTION.WAITING.clone();
 			if(Math.abs(axis0) + Math.abs(axis1) >= this._minDelta) {
@@ -113,42 +134,20 @@ export default class ControllerListener {
 			if(cord.x === 0 && cord.y === -1) cord = CONST.DIRECTION.UP;
 			
 			if(!Functions.comparePoints(cord, CONST.DIRECTION.WAITING)) {
-				this._dpadEventPressed({id: pad.id, index: pad.index}, cord);
+				this._dpadEventPressed({id: pad.data.id, index: padI}, cord);
 			}
 			
 			if(Functions.comparePoints(cord, pad._axisLast)) continue;
 			
 			if(!Functions.comparePoints(pad._axisLast, CONST.DIRECTION.WAITING)) {
-				this._dpadEventUp({id: pad.id, index: pad.index}, pad._axisLast);
+				this._dpadEventUp({id: pad.data.id, index: padI}, pad._axisLast);
 			}
 			if(!Functions.comparePoints(cord, CONST.DIRECTION.WAITING)) {
-				this._dpadEventDown({id: pad.id, index: pad.index}, cord);
+				this._dpadEventDown({id: pad.data.id, index: padI}, cord);
 			}
 			
 			pad._axisLast = cord.clone();
 		}
-	}
-	
-	_scanAddGamePads() {
-		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
-		
-		for(let pad of navigatorGamepads) {
-			if(!pad || this._gamepads.includes(pad)) continue;
-			pad._btnLast = [];
-			pad._axisLast = CONST.DIRECTION.WAITING.clone();
-			pad._multiKeyPresses = false;
-			this._gamepads.push(pad);
-			this._onEventConnect(pad);
-		}
-	}
-	
-	_scanRemoveGamePads() {
-		let navigatorGamepads = Object.values(navigator.getGamepads()) || [];
-		for(let pad of this._gamepads.filter(x => !navigatorGamepads.includes(x)) || []) {
-			this._onEventDisconnect(pad);
-		}
-		
-		this._gamepads = this._gamepads.filter(x => navigatorGamepads.includes(x)) || [];
 	}
 	
 	/**

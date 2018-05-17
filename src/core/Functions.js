@@ -20,7 +20,7 @@ class Functions {
 			.substring(1);
 	}
 	
-	static uuid(){return this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4();}
+	static uuid() {return this.s4() + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + "-" + this.s4() + this.s4() + this.s4();}
 }
 
 module.exports = Functions;
