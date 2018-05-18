@@ -74,8 +74,8 @@ let Graphics = {
 				
 				addMarker(marker, dir) {
 					let tempSprite = new createjs.Sprite(this._markerSheet);
-					tempSprite.x = marker._pos.x;
-					tempSprite.y = marker._pos.y;
+					tempSprite.x = marker.pos.x;
+					tempSprite.y = marker.pos.y;
 					
 					switch(dir) {
 					case CONST.DIRECTION.UP:
@@ -106,12 +106,12 @@ let Graphics = {
 					this._stage.update(event);
 				},
 				_handleAnimations(gameObj) {
-					gameObj._playerMap.forEach(function(player, key, map) {
+					for(let [key, player] of gameObj.playerMap) {
 						let animationString;
 						let tempSprite = this._playerMap.get(player._id);
 						
-						tempSprite.x = player._pos.x;
-						tempSprite.y = player._pos.y;
+						tempSprite.x = player.pos.x;
+						tempSprite.y = player.pos.y;
 						
 						switch(player._dir) {
 						case CONST.DIRECTION.UP:
@@ -134,12 +134,12 @@ let Graphics = {
 							tempSprite.gotoAndPlay("w" + animationString);
 						}
 						
-						player._markers.forEach(function(marker) {
+						for(let marker of player.markers) {
 							let tempMarker = this._markerMap.get(marker);
-							tempMarker.x = marker._pos.x;
-							tempMarker.y = marker._pos.y;
-						}.bind(this));
-					}.bind(this));
+							tempMarker.x = marker.pos.x;
+							tempMarker.y = marker.pos.y;
+						}
+					}
 				}
 			};
 		}

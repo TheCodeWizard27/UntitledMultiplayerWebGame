@@ -47,25 +47,25 @@ module.exports = {
 					this._gameObj.removePlayer(pad.index);
 				},
 				onBtnDown(name, object) {
-					let tempPlayer = this._gameObj.getPlayer(name.index);
+					let tempPlayer = this._gameObj.playerMap.get(name.index);
 					if(tempPlayer !== undefined) {
 						tempPlayer.addKey(object);
 					}
 				},
 				onBtnUp(name, object) {
-					let tempPlayer = this._gameObj.getPlayer(name.index);
+					let tempPlayer = this._gameObj.playerMap.get(name.index);
 					if(tempPlayer !== undefined) {
 						tempPlayer.removeKey(object);
 					}
 				},
 				onDPadDown(name, object) {
-					let tempPlayer = this._gameObj.getPlayer(name.index);
+					let tempPlayer = this._gameObj.playerMap.get(name.index);
 					if(tempPlayer !== undefined) {
 						tempPlayer.addKey(this._getDirectionfromString(object.toString()));
 					}
 				},
 				onDPadUp(name, object) {
-					let tempPlayer = this._gameObj.getPlayer(name.index);
+					let tempPlayer = this._gameObj.playerMap.get(name.index);
 					if(tempPlayer !== undefined) {
 						tempPlayer.removeKey(this._getDirectionfromString(object.toString()));
 					}

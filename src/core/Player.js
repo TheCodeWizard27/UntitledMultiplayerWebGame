@@ -9,9 +9,9 @@ const Marker = require("../../src/core/Marker.js");
  */
 module.exports = class Player {
 	constructor(id, pos) {
-		this._pos = pos;
+		this.pos = pos;
 		this._dir = CONST.DIRECTION.DOWN;
-		this._markers = [];
+		this.markers = [];
 		this._markCooldown = 0;
 		this._walking = false;
 		this._size = {width: 128, height: 128};
@@ -20,7 +20,7 @@ module.exports = class Player {
 		this._score = 0;
 		this._id = id;
 		
-		Graphics.getInstance().addPlayer(this._id, this._pos);
+		Graphics.getInstance().addPlayer(this._id, this.pos);
 		//socket.emit("I_AM_NEW", this); TODO Benny Networking
 	}
 	
@@ -33,7 +33,7 @@ module.exports = class Player {
 		if(this._markCooldown > 0) {
 			this._markCooldown--;
 		}
-		this._markers.forEach(function(marker) {
+		this.markers.forEach(function(marker) {
 			marker.update();
 		});
 	}
@@ -42,8 +42,8 @@ module.exports = class Player {
 		for(let value of this._currentKeys) {
 			if([CONST.DIRECTION.UP, CONST.DIRECTION.DOWN, CONST.DIRECTION.RIGHT, CONST.DIRECTION.LEFT].includes(value)) {
 				this._dir = value;
-				this._pos.x += this._dir.x * CONST.GAME_CONF.SPEED;
-				this._pos.y += this._dir.y * CONST.GAME_CONF.SPEED;
+				this.pos.x += this._dir.x * CONST.GAME_CONF.SPEED;
+				this.pos.y += this._dir.y * CONST.GAME_CONF.SPEED;
 				this._walking = true;
 			} else {
 				switch(value.nr) {
@@ -60,7 +60,7 @@ module.exports = class Player {
 	 */
 	mark() {
 		if(this._markCooldown <= 0) {
-			this._markers.push(new Marker(this._pos, this._dir));
+			this.markers.push(new Marker(this.pos, this._dir));
 			this._markCooldown = 7;
 		}
 	};
@@ -85,7 +85,7 @@ module.exports = class Player {
 	 * Deletes Player Sprite for deleting playerobj
 	 */
 	destroy() {
-		this._markers.forEach(x => x.destroy());
+		this.markers.forEach(x => x.destroy());
 		Graphics.getInstance().removePlayer(this._id);
 	}
 };

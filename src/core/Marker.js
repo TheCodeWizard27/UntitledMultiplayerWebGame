@@ -4,7 +4,7 @@ const CONST = require("./Const.js");
 
 module.exports = class Marker {
 	constructor(pos, dir) {
-		this._pos = pos.clone();
+		this.pos = pos.clone();
 		this._speed = new createjs.Point(CONST.GAME_CONF.MARKER_SPEED * dir.x, CONST.GAME_CONF.MARKER_SPEED * dir.y);
 		Graphics.getInstance().addMarker(this, dir);
 	}
@@ -14,7 +14,7 @@ module.exports = class Marker {
 	}
 	
 	update() {
-		this._pos.x += this._speed.x;
-		this._pos.y += this._speed.y;
+		this.pos.x += this._speed.x;
+		this.pos.y += this._speed.y;
 	}
 };
